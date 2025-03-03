@@ -14,7 +14,8 @@
   "main": "index.js",
   "scripts": {
     "lint": "biome check --fix --unsafe",
-    "lint:ci": "biome check"
+    "lint:ci": "biome check",
+    "test:type": "pnpm exec tsc --noEmit"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
