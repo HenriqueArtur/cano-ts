@@ -3,12 +3,7 @@
   "version": "0.1.0",
   "description": "",
   "license": "MIT",
-  "keywords": [
-    "pipe",
-    "operator",
-    "elixir",
-    "functional"
-  ],
+  "keywords": ["pipe", "operator", "elixir", "functional"],
   "author": "Henrique Artur <contato@henriqueartur.com>",
   "contributors": [],
   "repository": {
@@ -37,6 +32,7 @@
     "clean": "rm -rf dist test/dist",
     "lint": "biome check --fix --unsafe",
     "lint:ci": "biome check",
+    "prepare": "husky",
     "test": "vitest",
     "test:build": "vitest run test/** -c ./vitest.config.build.ts",
     "test:ci": "vitest run",
