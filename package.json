@@ -33,10 +33,13 @@
   },
   "scripts": {
     "build": "pnpm run clean && rollup --forceExit --config ./rollup.config.ts --configPlugin typescript",
-    "build:test": "pnpm run clean  && rollup -c rollup.config.test.mts --forceExit",
+    "build:test": "pnpm run clean  && rollup -c rollup.config.test.ts --forceExit --configPlugin typescript",
     "clean": "rm -rf dist test/dist",
     "lint": "biome check --fix --unsafe",
     "lint:ci": "biome check",
+    "test": "vitest",
+    "test:build": "vitest run test/** -c ./vitest.config.build.ts",
+    "test:ci": "vitest run",
     "test:type": "pnpm exec tsc --noEmit"
   },
   "devDependencies": {
