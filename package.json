@@ -17,7 +17,20 @@
   },
   "packageManager": "pnpm@10.5.2",
   "type": "module",
-  "main": "index.js",
+  "main": "dist/index.mjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.mjs"
+    },
+    "./*": {
+      "import": "./dist/*.mjs",
+      "types": "./dist/*.d.ts"
+    }
+  },
   "scripts": {
     "build": "pnpm run clean && rollup --forceExit --config ./rollup.config.ts --configPlugin typescript",
     "build:test": "pnpm run clean  && rollup -c rollup.config.test.mts --forceExit",
