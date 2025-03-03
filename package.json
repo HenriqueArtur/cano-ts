@@ -3,7 +3,12 @@
   "version": "0.1.0",
   "description": "",
   "license": "MIT",
-  "keywords": ["pipe", "operator", "elixir", "functional"],
+  "keywords": [
+    "pipe",
+    "operator",
+    "elixir",
+    "functional"
+  ],
   "author": "Henrique Artur <contato@henriqueartur.com>",
   "contributors": [],
   "repository": {
@@ -11,8 +16,12 @@
     "url": "https://github.com/HenriqueArtur/PipeLikeElixir"
   },
   "packageManager": "pnpm@10.5.2",
+  "type": "module",
   "main": "index.js",
   "scripts": {
+    "build": "pnpm run clean && rollup --forceExit --config ./rollup.config.ts --configPlugin typescript",
+    "build:test": "pnpm run clean  && rollup -c rollup.config.test.mts --forceExit",
+    "clean": "rm -rf dist test/dist",
     "lint": "biome check --fix --unsafe",
     "lint:ci": "biome check",
     "test:type": "pnpm exec tsc --noEmit"
@@ -27,6 +36,7 @@
     "npm-check-updates": "^17.1.15",
     "rollup": "^4.34.9",
     "rollup-plugin-dts": "^6.1.1",
+    "tslib": "^2.8.1",
     "typescript": "^5.8.2",
     "vitest": "^3.0.7"
   }
