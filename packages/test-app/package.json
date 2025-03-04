@@ -1,18 +1,4 @@
 {
   "name": "@cano-ts/test-app",
-  "version": "1.0.0",
-  "dependencies": {
-    "cano-ts": "file:./libs/dist/"
-  },
-  "scripts": {
-    "test": "tsc --noEmit && node index.js"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "catalog:",
-    "@types/node": "catalog:",
-    "tslib": "catalog:",
-    "typescript": "catalog:",
-    "vite-tsconfig-paths": "catalog:",
-    "vitest": "catalog:"
-  }
+  "version": "1.0.0"
 }

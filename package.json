@@ -40,6 +40,7 @@
     "lint:ci": "biome check ./packages/**",
     "version": "pnpm changeset",
     "prepare": "husky",
+    "prepare:test-app": "tsx ./scripts/prepare-test-app.ts",
     "test": "pnpm run --filter=@cano-ts/core test",
     "test:build": "pnpm run --filter=@cano-ts/core test:build",
     "test:ci": "pnpm run --filter=@cano-ts/core test:ci",
