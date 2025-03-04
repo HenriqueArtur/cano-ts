@@ -1,4 +1,14 @@
 {
   "name": "@cano-ts/test-app",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "dependencies": {
+    "cano-ts": "file:./libs/cano-ts"
+  },
+  "scripts": {
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^3.0.7"
+  }
 }

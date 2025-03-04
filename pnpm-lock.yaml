@@ -108,8 +108,6 @@ importers:
         specifier: 'catalog:'
         version: 3.0.7(@types/node@22.13.9)(tsx@4.19.3)
 
-  packages/test-app: {}
-
 packages:
 
   '@babel/code-frame@7.26.2':
