@@ -29,13 +29,13 @@ jobs:
         id: latest_version
         continue-on-error: true
         run: |
-          LATEST_VERSION=$(npm show $(jq -r .name package.json) version || echo "0.1.0")
+          LATEST_VERSION=$(npm show $(jq -r .name .package.json) version || echo "0.1.0")
           echo "latest_version=$LATEST_VERSION" >> $GITHUB_ENV
 
       - name: 📄 Get current package.json version
         id: package_version
         run: |
-          CURRENT_VERSION=$(jq -r .version package.json)
+          CURRENT_VERSION=$(jq -r .version ./packages/core/package.json)
           echo "current_version=$CURRENT_VERSION" >> $GITHUB_ENV
 
       - name: 🔍 Compare Versions
