@@ -1,0 +1,62 @@
+{
+  "name": "pipe-like-elixir",
+  "version": "0.1.0",
+  "description": "",
+  "license": "MIT",
+  "keywords": [
+    "pipe",
+    "operator",
+    "elixir",
+    "functional"
+  ],
+  "author": "Henrique Artur <contato@henriqueartur.com>",
+  "contributors": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HenriqueArtur/PipeLikeElixir"
+  },
+  "packageManager": "pnpm@10.5.2",
+  "type": "module",
+  "main": "dist/index.mjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.mjs"
+    },
+    "./*": {
+      "import": "./dist/*.mjs",
+      "types": "./dist/*.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "pnpm run clean && rollup --forceExit --config ./rollup.config.ts --configPlugin typescript",
+    "build:test": "pnpm run clean  && rollup -c rollup.config.test.ts --forceExit --configPlugin typescript",
+    "clean": "rm -rf dist test/dist",
+    "lint": "biome check --fix --unsafe ./src/**",
+    "lint:ci": "biome check ./src/**",
+    "prepare": "husky",
+    "test": "vitest",
+    "test:build": "vitest run test/** -c ./vitest.config.build.ts",
+    "test:ci": "vitest run",
+    "test:type": "pnpm exec tsc --noEmit"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@changesets/cli": "^2.28.1",
+    "@rollup/plugin-commonjs": "^28.0.2",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-typescript": "^12.1.2",
+    "@types/node": "^22.13.9",
+    "husky": "^9.1.7",
+    "npm-check-updates": "^17.1.15",
+    "rollup": "^4.34.9",
+    "rollup-plugin-dts": "^6.1.1",
+    "tslib": "^2.8.1",
+    "typescript": "^5.8.2",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^3.0.7"
+  }
+}
