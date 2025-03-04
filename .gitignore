@@ -128,3 +128,8 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# cano-ts
+# remove for tests
+./packages/test-app/libs/cano-ts
+./packages/test-app/package.json
