@@ -1,5 +1,5 @@
 {
-  "name": "pipe-like-elixir",
+  "name": "cano-ts",
   "version": "0.2.0",
   "description": "",
   "license": "MIT",
@@ -7,7 +7,8 @@
     "pipe",
     "operator",
     "elixir",
-    "functional"
+    "functional",
+    "typescript"
   ],
   "author": "Henrique Artur <contato@henriqueartur.com>",
   "contributors": [],
