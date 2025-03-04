@@ -50,6 +50,7 @@
     "@changesets/cli": "catalog:",
     "@types/node": "catalog:",
     "husky": "catalog:",
+    "tsx": "catalog:",
     "typescript": "catalog:"
   }
 }
