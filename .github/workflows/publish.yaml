@@ -45,7 +45,7 @@ jobs:
       - name: Install Dependencies
         run: |
           corepack enable
-          pnpm install --frozen-lockfile
+          pnpm install  --filter=@cano-ts/core --frozen-lockfile
 
       - name: Run Unit Tests
         run: pnpm run test:ci
@@ -90,7 +90,7 @@ jobs:
       - name: Install Dependencies
         run: |
           corepack enable
-          pnpm install --frozen-lockfile
+          pnpm install  --filter=@cano-ts/core --frozen-lockfile
 
       - name: Build Library
         run: pnpm run build
@@ -117,7 +117,7 @@ jobs:
         with:
           tag_name: v${{ env.new_version }}
           name: Release v${{ env.new_version }}
-          body_path: ./CHANGELOG.md
+          body_path: ./package/core/CHANGELOG.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

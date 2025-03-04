@@ -33,32 +33,22 @@
     }
   },
   "scripts": {
-    "build": "pnpm run clean && rollup --forceExit --config ./rollup.config.ts --configPlugin typescript",
-    "build:test": "pnpm run clean  && rollup -c rollup.config.test.ts --forceExit --configPlugin typescript",
-    "clean": "rm -rf dist test/dist",
-    "lint": "biome check --fix --unsafe ./src/**",
-    "lint:ci": "biome check ./src/**",
+    "build": "pnpm run --filter=@cano-ts/core build",
+    "clean": "rm -rf dist packages/core/test/dist",
+    "doc:version": "pnpm changeset",
+    "lint": "biome check --fix ./packages/**",
+    "lint:ci": "biome check ./packages/**",
+    "version": "pnpm changeset",
     "prepare": "husky",
-    "test": "vitest",
-    "test:build": "vitest run test/** -c ./vitest.config.build.ts",
-    "test:ci": "vitest run",
-    "test:type": "pnpm exec tsc --noEmit"
+    "test": "pnpm run --filter=@cano-ts/core test",
+    "test:build": "pnpm run --filter=@cano-ts/core test:build",
+    "test:ci": "pnpm run --filter=@cano-ts/core test:ci",
+    "test:type": "pnpm run --filter=@cano-ts/core test:type"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
-    "@changesets/cli": "^2.28.1",
-    "@rollup/plugin-commonjs": "^28.0.2",
-    "@rollup/plugin-json": "^6.1.0",
-    "@rollup/plugin-typescript": "^12.1.2",
-    "@types/node": "^22.13.9",
-    "husky": "^9.1.7",
-    "npm-check-updates": "^17.1.15",
-    "rollup": "^4.34.9",
-    "rollup-plugin-copy": "^3.5.0",
-    "rollup-plugin-dts": "^6.1.1",
-    "tslib": "^2.8.1",
-    "typescript": "^5.8.2",
-    "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^3.0.7"
+    "@biomejs/biome": "catalog:",
+    "@changesets/cli": "catalog:",
+    "husky": "catalog:",
+    "typescript": "catalog:"
   }
 }

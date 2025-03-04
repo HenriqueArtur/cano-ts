@@ -1,0 +1,51 @@
+{
+  "name": "@cano-ts/core",
+  "version": "0.2.1",
+  "description": "",
+  "license": "MIT",
+  "keywords": ["pipe", "operator", "elixir", "functional", "typescript"],
+  "author": "Henrique Artur <contato@henriqueartur.com>",
+  "contributors": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HenriqueArtur/cano-ts"
+  },
+  "packageManager": "pnpm@10.5.2",
+  "type": "module",
+  "main": "index.mjs",
+  "module": "index.mjs",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "types": "./index.d.ts",
+      "default": "./index.mjs"
+    },
+    "./*": {
+      "import": "./*.mjs",
+      "types": "./*.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "pnpm run clean && rollup --forceExit --config ./rollup.config.ts --configPlugin typescript",
+    "build:test": "pnpm run clean  && rollup -c rollup.config.test.ts --forceExit --configPlugin typescript",
+    "clean": "rm -rf ../../dist test/dist",
+    "test": "vitest",
+    "test:build": "vitest run test/** -c ./vitest.config.build.ts",
+    "test:ci": "vitest run",
+    "test:type": "pnpm exec tsc --noEmit"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "catalog:",
+    "@rollup/plugin-commonjs": "catalog:",
+    "@rollup/plugin-json": "catalog:",
+    "@rollup/plugin-typescript": "catalog:",
+    "@types/node": "catalog:",
+    "rollup": "catalog:",
+    "rollup-plugin-dts": "catalog:",
+    "tslib": "catalog:",
+    "typescript": "catalog:",
+    "vite-tsconfig-paths": "catalog:",
+    "vitest": "catalog:"
+  }
+}
