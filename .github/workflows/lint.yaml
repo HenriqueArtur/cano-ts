@@ -40,7 +40,7 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: 📥 Install dependencies
-        run: pnpm install
+        run: pnpm install --filter=@cano-ts/core
 
       - name: 🔎 Check lint
         run: pnpm run lint:ci

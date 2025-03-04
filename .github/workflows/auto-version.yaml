@@ -63,7 +63,7 @@ jobs:
 
       - name: 📥 Install dependencies
         if: env.needs_bump == 'true'
-        run: pnpm install
+        run: pnpm install --filter=@cano-ts/core
 
       - name: 📝 Ensure Changelog Exists
         if: env.needs_bump == 'true'

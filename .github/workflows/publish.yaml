@@ -45,7 +45,7 @@ jobs:
       - name: Install Dependencies
         run: |
           corepack enable
-          pnpm install --frozen-lockfile
+          pnpm install  --filter=@cano-ts/core --frozen-lockfile
 
       - name: Run Unit Tests
         run: pnpm run test:ci
@@ -90,7 +90,7 @@ jobs:
       - name: Install Dependencies
         run: |
           corepack enable
-          pnpm install --frozen-lockfile
+          pnpm install  --filter=@cano-ts/core --frozen-lockfile
 
       - name: Build Library
         run: pnpm run build
