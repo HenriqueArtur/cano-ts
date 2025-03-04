@@ -25,14 +25,12 @@ jobs:
           run_install: false
 
       - name: 📂 Get pnpm store directory
-        if: env.needs_bump == 'true'
         shell: bash
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
       - name: ⚡ Setup pnpm cache
         uses: actions/cache@v4
-        if: env.needs_bump == 'true'
         with:
           path: ${{ env.STORE_PATH }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
