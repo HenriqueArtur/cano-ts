@@ -61,12 +61,14 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+          always-auth: true
 
       - uses: pnpm/action-setup@v4
         name: Install pnpm
         with:
           run_install: false
-
+          
       - name: Get pnpm store directory
         shell: bash
         run: |
@@ -88,10 +90,18 @@ jobs:
       - name: Build Library
         run: pnpm run build
 
+      - name: Check npm whoami
+        run: |
+          echo "//registry.npmjs.org/:_authToken=\${NODE_AUTH_TOKEN}" > ~/.npmrc
+          npm whoami
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Publish to npm
         run: pnpm publish dist --no-git-checks --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_USERCONFIG: $HOME/.npmrc
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
