@@ -1,7 +1,9 @@
 name: Test Build
+
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+
 jobs:
   test-build:
     runs-on: ubuntu-latest
