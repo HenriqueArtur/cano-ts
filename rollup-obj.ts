@@ -1,6 +1,7 @@
 import typescript from "@rollup/plugin-typescript";
 import dts from "rollup-plugin-dts";
-import copy from "rollup-plugin-copy";
+import fs from "node:fs";
+import path from "node:path";
 
 export function FactoryRollupConfigsObject(output_dir) {
   return [
@@ -18,9 +19,26 @@ export function FactoryRollupConfigsObject(output_dir) {
         typescript({
           tsconfig: "./tsconfig.json",
         }),
-        copy({
-          targets: [{ src: "package.json", dest: output_dir }],
-        }),
+        {
+          name: "copy-package-json",
+          buildStart() {
+            if (!fs.existsSync(output_dir)) {
+              fs.mkdirSync(output_dir, { recursive: true });
+            }
+            const {
+              scripts: { prepare, ...pkg_scripts },
+              ...pkg
+            } = JSON.parse(fs.readFileSync("package.json", "utf-8"));
+            const pkg_widout_prepare = {
+              ...pkg,
+              scripts: pkg_scripts,
+            };
+            fs.writeFileSync(
+              path.join(output_dir, "package.json"),
+              JSON.stringify(pkg_widout_prepare, null, 2),
+            );
+          },
+        },
       ],
     },
     {
