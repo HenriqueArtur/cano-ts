@@ -99,6 +99,31 @@ importers:
         specifier: 'catalog:'
         version: 3.0.7(@types/node@22.13.9)
 
+  packages/test-app:
+    dependencies:
+      cano-ts:
+        specifier: file:./libs/dist/
+        version: file:packages/test-app/libs/dist
+    devDependencies:
+      '@biomejs/biome':
+        specifier: 'catalog:'
+        version: 1.9.4
+      '@types/node':
+        specifier: 'catalog:'
+        version: 22.13.9
+      tslib:
+        specifier: 'catalog:'
+        version: 2.8.1
+      typescript:
+        specifier: 'catalog:'
+        version: 5.8.2
+      vite-tsconfig-paths:
+        specifier: 'catalog:'
+        version: 5.1.4(typescript@5.8.2)(vite@6.2.0(@types/node@22.13.9))
+      vitest:
+        specifier: 'catalog:'
+        version: 3.0.7(@types/node@22.13.9)
+
 packages:
 
   '@babel/code-frame@7.26.2':
@@ -595,6 +620,9 @@ packages:
   cac@6.7.14:
     resolution: {integrity: sha512-b6Ilus+c3RrdDk+JhLKUAQfzzgLEPy6wcXqS7f/xe1EETvsDP6GORG7SFuOs6cID5YkqchW/LXZbX5bc8j7ZcQ==}
     engines: {node: '>=8'}
+
+  cano-ts@file:packages/test-app/libs/dist:
+    resolution: {directory: packages/test-app/libs/dist, type: directory}
 
   chai@5.2.0:
     resolution: {integrity: sha512-mCuXncKXk5iCLhfhwTc0izo0gtEmpz5CtG2y8GiOINBlMVS6v8TMRc5TaLWKS6692m9+dVVfzgeVxR5UxWHTYw==}
@@ -1597,6 +1625,8 @@ snapshots:
       fill-range: 7.1.1
 
   cac@6.7.14: {}
+
+  cano-ts@file:packages/test-app/libs/dist: {}
 
   chai@5.2.0:
     dependencies:
