@@ -1,13 +1,14 @@
 import typescript from "@rollup/plugin-typescript";
 import dts from "rollup-plugin-dts";
+import copy from "rollup-plugin-copy";
 
-export function FactoryRollupConfigsObject(OUTPUT_DIR_PATH) {
+export function FactoryRollupConfigsObject(output_dir) {
   return [
     {
       input: "src/index.ts",
       output: [
         {
-          dir: OUTPUT_DIR_PATH,
+          dir: output_dir,
           format: "esm",
           entryFileNames: "[name].mjs",
           preserveModules: true,
@@ -17,15 +18,17 @@ export function FactoryRollupConfigsObject(OUTPUT_DIR_PATH) {
         typescript({
           tsconfig: "./tsconfig.json",
         }),
+        copy({
+          targets: [{ src: "package.json", dest: output_dir }],
+        }),
       ],
     },
     {
       input: "src/index.ts",
       output: [
         {
-          dir: OUTPUT_DIR_PATH,
+          dir: output_dir,
           format: "es",
-          preserveModules: true,
         },
       ],
       plugins: [

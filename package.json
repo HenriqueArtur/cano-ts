@@ -1,5 +1,5 @@
 {
-  "name": "pipe-like-elixir",
+  "name": "cano-ts",
   "version": "0.2.0",
   "description": "",
   "license": "MIT",
@@ -7,7 +7,8 @@
     "pipe",
     "operator",
     "elixir",
-    "functional"
+    "functional",
+    "typescript"
   ],
   "author": "Henrique Artur <contato@henriqueartur.com>",
   "contributors": [],
@@ -17,18 +18,18 @@
   },
   "packageManager": "pnpm@10.5.2",
   "type": "module",
-  "main": "dist/index.mjs",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "main": "index.mjs",
+  "module": "index.mjs",
+  "types": "index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.mjs"
+      "import": "./index.mjs",
+      "types": "./index.d.ts",
+      "default": "./index.mjs"
     },
     "./*": {
-      "import": "./dist/*.mjs",
-      "types": "./dist/*.d.ts"
+      "import": "./*.mjs",
+      "types": "./*.d.ts"
     }
   },
   "scripts": {
@@ -53,6 +54,7 @@
     "husky": "^9.1.7",
     "npm-check-updates": "^17.1.15",
     "rollup": "^4.34.9",
+    "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-dts": "^6.1.1",
     "tslib": "^2.8.1",
     "typescript": "^5.8.2",

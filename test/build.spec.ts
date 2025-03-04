@@ -10,6 +10,7 @@ const BUILD_OUTPUT_DIR = "dist";
 describe("Rollup Build", () => {
   const esm_dir = join(__dirname, `${BUILD_OUTPUT_DIR}`);
   const types_dir = join(__dirname, `${BUILD_OUTPUT_DIR}`);
+  const pkg_json_dir = join(__dirname, `${BUILD_OUTPUT_DIR}`);
 
   beforeAll(async () => {
     await execPromise("pnpm run build:test");
@@ -23,5 +24,10 @@ describe("Rollup Build", () => {
   it("should create TypeScript declaration file", async () => {
     const files = await fs.readdir(types_dir);
     expect(files).toContain("index.d.ts");
+  });
+
+  it(`should copy "package.json" file to "${BUILD_OUTPUT_DIR}/"`, async () => {
+    const files = await fs.readdir(pkg_json_dir);
+    expect(files).toContain("package.json");
   });
 });
