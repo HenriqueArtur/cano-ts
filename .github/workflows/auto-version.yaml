@@ -1,0 +1,81 @@
+name: Auto Version in PR Branch
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  auto-version:
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }} # Checkout the PR branch
+
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '22'
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          run_install: false
+
+      - name: Get latest published version from npm
+        id: latest_version
+        continue-on-error: true
+        run: |
+          LATEST_VERSION=$(npm show $(jq -r .name package.json) version || echo "0.1.0")
+          echo "latest_version=$LATEST_VERSION" >> $GITHUB_ENV
+
+      - name: Get current package.json version
+        id: package_version
+        run: |
+          CURRENT_VERSION=$(jq -r .version package.json)
+          echo "current_version=$CURRENT_VERSION" >> $GITHUB_ENV
+
+      - name: Compare Versions
+        id: compare_versions
+        run: |
+          if [ "$(printf '%s\n' "$latest_version" "$current_version" | sort -V | head -n1)" = "$latest_version" ]; then
+            echo "needs_bump=true" >> $GITHUB_ENV
+          else
+            echo "needs_bump=false" >> $GITHUB_ENV
+          fi
+
+      - name: Get pnpm store directory
+        if: env.needs_bump == 'true'
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        if: env.needs_bump == 'true'
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        if: env.needs_bump == 'true'
+        run: pnpm install
+
+      - name: Bump Version & Commit Changes
+        if: env.needs_bump == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          touch CHANGELOG.md
+          pnpm changeset version
+          NEW_VERSION=$(jq -r .version package.json)
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "🔖 \`v$NEW_VERSION\`"
+          git push origin HEAD:${{ github.head_ref }}
