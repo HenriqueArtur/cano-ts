@@ -74,8 +74,8 @@ jobs:
           touch CHANGELOG.md
           pnpm changeset version
           NEW_VERSION=$(jq -r .version package.json)
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add .
-          git commit -m "🔖 `v$NEW_VERSION`"
+          git commit -m "🔖 \`v$NEW_VERSION\`"
           git push origin HEAD:${{ github.head_ref }}
