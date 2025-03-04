@@ -1,10 +1,10 @@
 import { exec } from "node:child_process";
 import { promises } from "node:fs";
+import fs from "node:fs";
 import { join } from "node:path";
+import path from "node:path";
 import { promisify } from "node:util";
 import { beforeAll, describe, expect, it } from "vitest";
-import fs from "node:fs";
-import path from "node:path";
 
 const execPromise = promisify(exec);
 const BUILD_OUTPUT_DIR = "dist";
@@ -38,5 +38,12 @@ describe("Rollup Build", () => {
       fs.readFileSync(path.join(__dirname, BUILD_OUTPUT_DIR, "package.json"), "utf-8"),
     );
     expect(pkg.scripts.prepare).toBeUndefined();
+  });
+
+  it(`should set "name" as "cano-ts"`, () => {
+    const pkg = JSON.parse(
+      fs.readFileSync(path.join(__dirname, BUILD_OUTPUT_DIR, "package.json"), "utf-8"),
+    );
+    expect(pkg.name).toBe("cano-ts");
   });
 });

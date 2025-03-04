@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "disableSizeLimit": true,
+    "isolatedModules": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "target": "es2022",
+    "types": ["node"],
+    "baseUrl": "./src",
+    "rootDir": "./src",
+    "strictNullChecks": true,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false
+  },
+  "include": ["./src/**/*.ts"],
+  "exclude": ["node_modules", "./**.ts", "**/**.config.ts"]
+}
