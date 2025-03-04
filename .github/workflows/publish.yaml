@@ -117,7 +117,7 @@ jobs:
         with:
           tag_name: v${{ env.new_version }}
           name: Release v${{ env.new_version }}
-          body_path: ./CHANGELOG.md
+          body_path: ./package/core/CHANGELOG.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

@@ -3,7 +3,7 @@ import path from "node:path";
 import typescript from "@rollup/plugin-typescript";
 import dts from "rollup-plugin-dts";
 
-export function FactoryRollupConfigsObject(output_dir, is_a_test = false) {
+export function FactoryRollupConfigsObject(output_dir) {
   return [
     {
       input: "src/index.ts",
@@ -28,26 +28,12 @@ export function FactoryRollupConfigsObject(output_dir, is_a_test = false) {
             }
             const pkg_path = path.join(output_dir, "package.json");
             const {
-              version,
               name,
               scripts: { prepare, ...pkg_scripts },
               ...pkg
             } = JSON.parse(fs.readFileSync("package.json", "utf-8"));
-            if (is_a_test) {
-              const pkg_widout_prepare = {
-                name: PKG_NAME,
-                version,
-                ...pkg,
-                scripts: pkg_scripts,
-              };
-              fs.writeFileSync(pkg_path, JSON.stringify(pkg_widout_prepare, null, 2));
-              return;
-            }
-            const root_pkg = path.join(output_dir, "package.json");
-            const { version: root_version } = JSON.parse(fs.readFileSync(root_pkg, "utf-8"));
             const pkg_widout_prepare = {
               name: PKG_NAME,
-              version: root_version,
               ...pkg,
               scripts: pkg_scripts,
             };
