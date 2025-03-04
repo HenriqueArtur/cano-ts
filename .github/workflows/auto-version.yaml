@@ -1,4 +1,4 @@
-name: Auto Version in PR Branch
+name: 🔖 Auto Version in PR Branch
 
 on:
   pull_request:
@@ -40,7 +40,7 @@ jobs:
       - name: 🔍 Compare Versions
         id: compare_versions
         run: |
-          if [ "$(printf '%s\n' "$latest_version" "$current_version" | sort -V | head -n1)" = "$latest_version" ]; then
+          if [ "$(printf '%s\n' "$latest_version" "$current_version" | sort -V | head -n1)" != "$latest_version" ]; then
             echo "needs_bump=true" >> $GITHUB_ENV
           else
             echo "needs_bump=false" >> $GITHUB_ENV

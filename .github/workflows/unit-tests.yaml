@@ -1,4 +1,4 @@
-name: Unit Tests
+name: 🧪 Unit Tests
 
 on:
   pull_request:
@@ -9,34 +9,38 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 1
     steps:
-      - name: Checkout code
+      - name: 🔄 Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }} # Checkout the PR branch
 
-      - name: Use Node.js
+      - name: 🔧 Use Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '22'
 
-      - uses: pnpm/action-setup@v4
-        name: Install pnpm
+      - name: 📦 Install pnpm
+        uses: pnpm/action-setup@v4
         with:
           run_install: false
 
-      - name: Get pnpm store directory
+      - name: 📂 Get pnpm store directory
+        if: env.needs_bump == 'true'
         shell: bash
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - uses: actions/cache@v4
-        name: Setup pnpm cache
+      - name: ⚡ Setup pnpm cache
+        uses: actions/cache@v4
+        if: env.needs_bump == 'true'
         with:
           path: ${{ env.STORE_PATH }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
-      - name: Install dependencies
+      - name: 📥 Install dependencies
         run: pnpm install
 
-      - name: Run tests
+      - name: 🧪 Run tests
         run: pnpm run test:ci
