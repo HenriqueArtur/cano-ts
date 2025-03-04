@@ -27,9 +27,8 @@ jobs:
 
       - name: 📡 Get latest published version from npm
         id: latest_version
-        continue-on-error: true
         run: |
-          LATEST_VERSION=$(npm show $(jq -r .name .package.json) version || echo "0.1.0")
+          LATEST_VERSION=$(npm show $(jq -r .name package.json) version || echo "0.1.0")
           echo "latest_version=$LATEST_VERSION" >> $GITHUB_ENV
 
       - name: 📄 Get current package.json version
