@@ -98,9 +98,12 @@ jobs:
         run: touch CHANGELOG.md
 
       - name: Commit and Push Version Bump
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
+          git remote set-url origin https://x-access-token:${GH_PAT}@github.com/HenriqueArtur/PipeLikeElixir.git
           git diff --quiet && echo "No changes to commit" || (git add . && git commit -m "🔖 v${{ env.new_version }} [skip ci]" && git push)
 
   publish:
