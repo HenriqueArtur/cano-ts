@@ -131,5 +131,5 @@ dist
 
 # cano-ts
 # remove for tests
-./packages/test-app/libs/cano-ts
-./packages/test-app/package.json
+packages/test-app/libs/**
+!packages/test-app/libs/.gitkeep
