@@ -56,6 +56,9 @@ importers:
       '@changesets/cli':
         specifier: 'catalog:'
         version: 2.28.1
+      '@types/node':
+        specifier: 'catalog:'
+        version: 22.13.9
       husky:
         specifier: 'catalog:'
         version: 9.1.7

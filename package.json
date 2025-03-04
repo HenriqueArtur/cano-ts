@@ -48,6 +48,7 @@
   "devDependencies": {
     "@biomejs/biome": "catalog:",
     "@changesets/cli": "catalog:",
+    "@types/node": "catalog:",
     "husky": "catalog:",
     "typescript": "catalog:"
   }
