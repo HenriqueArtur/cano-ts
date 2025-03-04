@@ -34,9 +34,9 @@
   },
   "scripts": {
     "build": "pnpm run --filter=@cano-ts/core build",
-    "clean": "rm -rf dist",
+    "clean": "rm -rf dist packages/core/test/dist",
     "doc:version": "pnpm changeset",
-    "lint": "biome check --fix --unsafe ./packages/**",
+    "lint": "biome check --fix ./packages/**",
     "lint:ci": "biome check ./packages/**",
     "version": "pnpm changeset",
     "prepare": "husky",

@@ -29,9 +29,7 @@
   "scripts": {
     "build": "pnpm run clean && rollup --forceExit --config ./rollup.config.ts --configPlugin typescript",
     "build:test": "pnpm run clean  && rollup -c rollup.config.test.ts --forceExit --configPlugin typescript",
-    "clean": "rm -rf dist test/dist",
-    "lint": "biome check --fix --unsafe ./src/**",
-    "lint:ci": "biome check ./src/**",
+    "clean": "rm -rf ../../dist test/dist",
     "test": "vitest",
     "test:build": "vitest run test/** -c ./vitest.config.build.ts",
     "test:ci": "vitest run",
