@@ -1,11 +1,10 @@
 import { execSync } from "node:child_process";
-import { copyFileSync, existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readdirSync, rmSync } from "node:fs";
 import path from "node:path";
 
 const ROOT_DIR = process.cwd();
 const DIST_DIR = path.join(ROOT_DIR, "dist");
 const TARGET_LIB_DIR = path.join(ROOT_DIR, "packages/test-app/libs/cano-ts");
-const TEST_APP_DIR = path.join(ROOT_DIR, "packages/test-app");
 
 function prepareTestApp() {
   // Step 1: Run `pnpm run build`
@@ -37,29 +36,12 @@ function prepareTestApp() {
   console.log("📦 Copying dist to:", TARGET_LIB_DIR);
   copyRecursive(DIST_DIR, TARGET_LIB_DIR);
 
-  // Step 3: Create package.json in `packages/test-app`
-  const packageJsonContent = {
-    name: "@cano-ts/test-app",
-    version: "1.0.0",
-    dependencies: {
-      "cano-ts": "file:./libs/cano-ts",
-    },
-    scripts: {
-      test: "tsc --noEmit && node index.js",
-    },
-    devDependencies: {
-      "@biomejs/biome": "catalog:",
-      "@types/node": "catalog:",
-      tslib: "catalog:",
-      typescript: "catalog:",
-      "vite-tsconfig-paths": "catalog:",
-      vitest: "catalog:",
-    },
-  };
-
-  const packageJsonPath = path.join(TEST_APP_DIR, "package.json");
-  console.log("📝 Writing package.json to:", packageJsonPath);
-  writeFileSync(packageJsonPath, JSON.stringify(packageJsonContent, null, 2));
+  // Step 3: Run `pnpm install --filter=@cano-ts/test-app`
+  console.log("📥 Installing dependencies for @cano-ts/test-app...");
+  const testAppDir = path.join(ROOT_DIR, "packages/test-app");
+  process.chdir(testAppDir); // Change the current working directory
+  execSync("pnpm install", { stdio: "inherit" });
+  process.chdir(ROOT_DIR);
 
   console.log("✅ Build and setup completed successfully!");
 }

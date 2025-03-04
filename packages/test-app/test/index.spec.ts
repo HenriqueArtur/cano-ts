@@ -1,7 +1,5 @@
 // @ts-expect-error - We expect this to fail if imported
-import { pipe, pipeSync } from "cano-ts";
-// @ts-expect-error - We expect this to fail if imported
-import { Pipe, PipeSync } from "cano-ts/classes";
+import { Pipe, PipeSync, pipe, pipeSync } from "cano-ts/pipe";
 import { describe, expect, it } from "vitest";
 
 describe("cano-ts exports", () => {
@@ -11,7 +9,7 @@ describe("cano-ts exports", () => {
   });
 
   it("should not export Pipe and PipeSync from cano-ts/classes", () => {
-    expect(() => Pipe).toThrowError();
-    expect(() => PipeSync).toThrowError();
+    expect(Pipe).toBeUndefined();
+    expect(PipeSync).toBeUndefined();
   });
 });
