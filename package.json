@@ -3,7 +3,12 @@
   "version": "0.1.0",
   "description": "",
   "license": "MIT",
-  "keywords": ["pipe", "operator", "elixir", "functional"],
+  "keywords": [
+    "pipe",
+    "operator",
+    "elixir",
+    "functional"
+  ],
   "author": "Henrique Artur <contato@henriqueartur.com>",
   "contributors": [],
   "repository": {
@@ -30,8 +35,8 @@
     "build": "pnpm run clean && rollup --forceExit --config ./rollup.config.ts --configPlugin typescript",
     "build:test": "pnpm run clean  && rollup -c rollup.config.test.ts --forceExit --configPlugin typescript",
     "clean": "rm -rf dist test/dist",
-    "lint": "biome check --fix --unsafe",
-    "lint:ci": "biome check",
+    "lint": "biome check --fix --unsafe ./src/**",
+    "lint:ci": "biome check ./src/**",
     "prepare": "husky",
     "test": "vitest",
     "test:build": "vitest run test/** -c ./vitest.config.build.ts",
