@@ -14,7 +14,7 @@
   "contributors": [],
   "repository": {
     "type": "git",
-    "url": "https://github.com/HenriqueArtur/PipeLikeElixir"
+    "url": "https://github.com/HenriqueArtur/cano-ts"
   },
   "packageManager": "pnpm@10.5.2",
   "type": "module",
