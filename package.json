@@ -1,6 +1,6 @@
 {
   "name": "cano-ts",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "description": "",
   "license": "MIT",
   "keywords": [
@@ -38,17 +38,23 @@
     "doc:version": "pnpm changeset",
     "lint": "biome check --fix ./packages/**",
     "lint:ci": "biome check ./packages/**",
-    "version": "pnpm changeset",
     "prepare": "husky",
+    "prepare:test-app": "tsx ./scripts/prepare-test-app.ts",
     "test": "pnpm run --filter=@cano-ts/core test",
     "test:build": "pnpm run --filter=@cano-ts/core test:build",
     "test:ci": "pnpm run --filter=@cano-ts/core test:ci",
-    "test:type": "pnpm run --filter=@cano-ts/core test:type"
+    "test:integration": "pnpm run prepare:test-app && pnpm run test:test-app",
+    "test:test-app": "tsx ./scripts/run-tests-in-test-app.ts",
+    "test:type": "pnpm run --filter=@cano-ts/core test:type",
+    "update:root:version": "tsx ./scripts/update-global-version.ts",
+    "version": "pnpm changeset"
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
     "@changesets/cli": "catalog:",
+    "@types/node": "catalog:",
     "husky": "catalog:",
+    "tsx": "catalog:",
     "typescript": "catalog:"
   }
 }

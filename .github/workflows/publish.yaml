@@ -1,4 +1,4 @@
-name: Release and Publish
+name: ✨ Release and Publish
 
 on:
   push:
@@ -7,117 +7,118 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   packages: write
 
 jobs:
   test:
-    name: Run Tests
+    name: 🧪 Run Tests
     runs-on: ubuntu-latest
     timeout-minutes: 1
     steps:
-      - name: Checkout code
+      - name: 🔄 Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }} # Checkout the PR branch
 
-      - name: Use Node.js
+      - name: 🔧 Use Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '22'
 
-      - uses: pnpm/action-setup@v4
-        name: Install pnpm
+      - name: 📦 Install pnpm
+        uses: pnpm/action-setup@v4
         with:
           run_install: false
 
-      - name: Get pnpm store directory
+      - name: 📂 Get pnpm store directory
         shell: bash
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - uses: actions/cache@v4
-        name: Setup pnpm cache
+      - name: ⚡ Setup pnpm cache
+        uses: actions/cache@v4
         with:
           path: ${{ env.STORE_PATH }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
-      - name: Install Dependencies
-        run: |
-          corepack enable
-          pnpm install  --filter=@cano-ts/core --frozen-lockfile
+      - name: 📥 Install dependencies
+        run: pnpm install --filter=@cano-ts/core
 
-      - name: Run Unit Tests
+      - name: 🧪 Run Unit Tests
         run: pnpm run test:ci
 
-      - name: Run Build Tests
+      - name: ✅ Run Build Tests
         run: pnpm run test:build
 
+      - name: 🤡 Run tests
+        run: pnpm run test:integration
+
   publish:
-    name: Build & Publish
+    name: ✨ Build & Publish
     runs-on: ubuntu-latest
     needs: test  # Runs only if testing is successful
     timeout-minutes: 2
     steps:
-      - name: Checkout code
+      - name: 🔄 Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }} # Checkout the PR branch
 
-      - name: Use Node.js
+      - name: 🔧 Use Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '22'
-          registry-url: 'https://registry.npmjs.org'
-          always-auth: true
 
-      - uses: pnpm/action-setup@v4
-        name: Install pnpm
+      - name: 📦 Install pnpm
+        uses: pnpm/action-setup@v4
         with:
           run_install: false
-          
-      - name: Get pnpm store directory
+
+      - name: 📂 Get pnpm store directory
         shell: bash
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - uses: actions/cache@v4
-        name: Setup pnpm cache
+      - name: ⚡ Setup pnpm cache
+        uses: actions/cache@v4
         with:
           path: ${{ env.STORE_PATH }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
-      - name: Install Dependencies
-        run: |
-          corepack enable
-          pnpm install  --filter=@cano-ts/core --frozen-lockfile
+      - name: 📥 Install dependencies
+        run: pnpm install --filter=@cano-ts/core
 
-      - name: Build Library
+      - name: 🚧 Build Library
         run: pnpm run build
 
-      - name: Set npm authentication
+      - name: 🔒️ Set npm authentication
         run: |
           echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Verify npm Authentication
+      - name: 🔐 Verify npm Authentication
         run: npm whoami
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Publish to npm
+      - name: 🚀 Publish to npm
         run: npm publish --access public
         working-directory: dist
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Create GitHub Release
+      - name: 📝 Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ env.new_version }}
           name: Release v${{ env.new_version }}
-          body_path: ./package/core/CHANGELOG.md
+          body_path: ./packages/core/CHANGELOG.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

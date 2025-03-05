@@ -40,10 +40,12 @@ jobs:
       - name: 🔍 Compare Versions
         id: compare_versions
         run: |
-          if [ "$(printf '%s\n' "$latest_version" "$current_version" | sort -V | head -n1)" != "$latest_version" ]; then
-            echo "needs_bump=true" >> $GITHUB_ENV
-          else
+          if [[ "$latest_version" == "$current_version" ]]; then
+            echo "needs_bump=true" >> $GITHUB_ENV  # Versions are equal
+          elif [[ "$latest_version" < "$current_version" ]]; then # String comparison, may not work correctly for all version formats
             echo "needs_bump=false" >> $GITHUB_ENV
+          else
+            echo "needs_bump=true" >> $GITHUB_ENV   # latest_version is greater than current_version
           fi
 
       - name: 📂 Get pnpm store directory
@@ -76,7 +78,11 @@ jobs:
       - name: 🔢 Get New Version
         if: env.needs_bump == 'true'
         run: |
-          echo "NEW_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
+          echo "NEW_VERSION=$(jq -r .version ./packages/core/package.json)" >> $GITHUB_ENV
+
+      - name: ✨ Set new version on root "package.json"
+        if: env.needs_bump == 'true'
+        run: pnpm run update:root:version
 
       - name: 🔎 Run Lint
         if: env.needs_bump == 'true'

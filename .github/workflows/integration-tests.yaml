@@ -1,11 +1,11 @@
-name: 🚨 Lint
+name: 🤡 Integration Tests
 
 on:
   pull_request:
     types: [opened, synchronize, reopened]
 
 jobs:
-  lint:
+  integration-tests:
     runs-on: ubuntu-latest
     timeout-minutes: 1
     steps:
@@ -40,5 +40,5 @@ jobs:
       - name: 📥 Install dependencies
         run: pnpm install --filter=@cano-ts/core
 
-      - name: 🔎 Check lint
-        run: pnpm run lint:ci
+      - name: 🤡 Run tests
+        run: pnpm run test:integration

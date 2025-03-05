@@ -1,5 +1,6 @@
 packages:
   - "packages/*"
+  - "!packages/test-app"
 
 catalog:
   "@biomejs/biome": "^1.9.4"
@@ -17,3 +18,4 @@ catalog:
   "typescript": "^5.8.2"
   "vite-tsconfig-paths": "^5.1.4"
   "vitest": "^3.0.7"
+  "tsx": "4.19.3"
