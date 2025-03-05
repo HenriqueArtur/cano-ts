@@ -78,7 +78,11 @@ jobs:
       - name: 🔢 Get New Version
         if: env.needs_bump == 'true'
         run: |
-          echo "NEW_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
+          echo "NEW_VERSION=$(jq -r .version ./packages/core/package.json)" >> $GITHUB_ENV
+
+      - name: ✨ Set new version on root "package.json"
+        if: env.needs_bump == 'true'
+        run: pnpm run update:root:version
 
       - name: 🔎 Run Lint
         if: env.needs_bump == 'true'
