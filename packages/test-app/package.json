@@ -1,5 +1,5 @@
 {
-  "name": "@cano-ts/test-app",
+  "name": "test-app",
   "version": "1.0.0",
   "dependencies": {
     "cano-ts": "file:./libs/cano-ts"

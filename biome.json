@@ -9,7 +9,8 @@
     "ignoreUnknown": false,
     "ignore": [
       "./dist/*",
-      "./**/dist/*"
+      "./**/dist/*",
+      "./**/cano-ts/*"
     ]
   },
   "formatter": {

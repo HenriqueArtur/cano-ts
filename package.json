@@ -44,7 +44,8 @@
     "test": "pnpm run --filter=@cano-ts/core test",
     "test:build": "pnpm run --filter=@cano-ts/core test:build",
     "test:ci": "pnpm run --filter=@cano-ts/core test:ci",
-    "test:integration": "pnpm run prepare:test-app && cd packages/test-app && pnpm run test",
+    "test:integration": "pnpm run prepare:test-app && pnpm run test:test-app",
+    "test:test-app": "tsx ./scripts/run-tests-in-test-app.ts",
     "test:type": "pnpm run --filter=@cano-ts/core test:type"
   },
   "devDependencies": {

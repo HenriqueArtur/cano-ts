@@ -4,7 +4,8 @@ import path from "node:path";
 
 const ROOT_DIR = process.cwd();
 const DIST_DIR = path.join(ROOT_DIR, "dist");
-const TARGET_LIB_DIR = path.join(ROOT_DIR, "packages/test-app/libs/cano-ts");
+const TEST_APP_DIR = path.join(ROOT_DIR, "packages", "test-app");
+const TARGET_LIB_DIR = path.join(ROOT_DIR, "packages", "test-app", "libs", "cano-ts");
 
 function prepareTestApp() {
   // Step 1: Run `pnpm run build`
@@ -38,9 +39,8 @@ function prepareTestApp() {
 
   // Step 3: Run `pnpm install --filter=@cano-ts/test-app`
   console.log("📥 Installing dependencies for @cano-ts/test-app...");
-  const testAppDir = path.join(ROOT_DIR, "packages/test-app");
-  process.chdir(testAppDir); // Change the current working directory
-  execSync("pnpm install", { stdio: "inherit" });
+  process.chdir(TEST_APP_DIR);
+  execSync("npm i", { cwd: TEST_APP_DIR, stdio: "inherit" });
   process.chdir(ROOT_DIR);
 
   console.log("✅ Build and setup completed successfully!");
