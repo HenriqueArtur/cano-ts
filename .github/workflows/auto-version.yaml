@@ -43,7 +43,7 @@ jobs:
       - name: 🔍 Compare Versions
         id: compare_versions
         run: |
-          if [[ $(semver compare "$latest_version" "$current_version") -le 0 ]]; then
+          if [[ $(semver compare "$latest_version" "$current_version") -le 1 ]]; then
             echo "needs_bump=true" >> $GITHUB_ENV
           else
             echo "needs_bump=false" >> $GITHUB_ENV
