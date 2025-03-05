@@ -1,7 +1,7 @@
 name: 🧪 Unit Tests
 
 on:
-  workflow_dispatch:
+  workflow_call:
 
 jobs:
   unit-tests:

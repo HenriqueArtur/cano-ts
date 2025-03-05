@@ -1,7 +1,7 @@
 name: 🏷️ Type safe
 
 on:
-  workflow_dispatch:
+  workflow_call:
 
 jobs:
   type-safe:

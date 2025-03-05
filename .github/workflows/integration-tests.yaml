@@ -1,10 +1,7 @@
 name: 🤡 Integration Tests
 
 on:
-  workflow_run:
-    workflows: ["🔖 Auto Version in PR Branch"]
-    types:
-      - completed
+  workflow_call:
 
 jobs:
   integration-tests:
