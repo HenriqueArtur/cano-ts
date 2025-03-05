@@ -124,6 +124,6 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 workflow_id: workflow,
-                ref: "${{ github.head_ref }}"
+                ref: `refs/heads/${{ github.head_ref }}`
               });
             }
