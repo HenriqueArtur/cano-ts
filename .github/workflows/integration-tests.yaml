@@ -2,8 +2,6 @@ name: 🤡 Integration Tests
 
 on:
   workflow_dispatch:
-    inputs:
-      trigger:
 
 jobs:
   integration-tests:

@@ -2,8 +2,6 @@ name: 🏷️ Type safe
 
 on:
   workflow_dispatch:
-    inputs:
-      trigger:
 
 jobs:
   type-safe:

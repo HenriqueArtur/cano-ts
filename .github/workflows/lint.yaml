@@ -2,8 +2,6 @@ name: 🚨 Lint
 
 on:
   workflow_dispatch:
-    inputs:
-      trigger:
 
 jobs:
   lint:

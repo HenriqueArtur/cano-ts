@@ -2,8 +2,6 @@ name: 🧪 Unit Tests
 
 on:
   workflow_dispatch:
-    inputs:
-      trigger:
 
 jobs:
   unit-tests:
