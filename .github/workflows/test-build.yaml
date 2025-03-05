@@ -1,8 +1,9 @@
 name: ✅ Test Build
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+    inputs:
+      trigger:
 
 jobs:
   test-build:
