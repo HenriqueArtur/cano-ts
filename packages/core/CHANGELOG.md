@@ -1,5 +1,11 @@
 # @cano-ts/core
 
+## 0.3.0
+
+### Minor Changes
+
+- 7c6d6db: add message to log function
+
 ## 0.2.2
 
 ### Patch Changes
