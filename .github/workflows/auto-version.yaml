@@ -37,16 +37,15 @@ jobs:
           CURRENT_VERSION=$(jq -r .version ./packages/core/package.json)
           echo "current_version=$CURRENT_VERSION" >> $GITHUB_ENV
 
-      - name: 🛠️ Install semver (using pnpm)
-        run: pnpm add -g semver
-
       - name: 🔍 Compare Versions
         id: compare_versions
         run: |
-          if [[ $(semver compare "$latest_version" "$current_version") -le 1 ]]; then
-            echo "needs_bump=true" >> $GITHUB_ENV
-          else
+          if [[ "$latest_version" == "$current_version" ]]; then
+            echo "needs_bump=false" >> $GITHUB_ENV  # Versions are equal
+          elif [[ "$latest_version" < "$current_version" ]]; then # String comparison, may not work correctly for all version formats
             echo "needs_bump=false" >> $GITHUB_ENV
+          else
+            echo "needs_bump=true" >> $GITHUB_ENV   # latest_version is greater than current_version
           fi
 
       - name: 📂 Get pnpm store directory
