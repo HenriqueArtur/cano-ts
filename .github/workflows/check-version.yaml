@@ -1,0 +1,51 @@
+name: 🔖 Check Version in PR Branch
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - name: 🔄 Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: 🔧 Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '22'
+
+      - name: 📦 Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: 📡 Get latest published version from npm
+        id: latest_version
+        run: |
+          LATEST_VERSION=$(npm show $(jq -r .name package.json) version || echo "0.1.0")
+          echo "latest_version=$LATEST_VERSION" >> $GITHUB_ENV
+
+      - name: 📄 Get current package.json version
+        id: package_version
+        run: |
+          CURRENT_VERSION=$(jq -r .version ./packages/core/package.json)
+          echo "current_version=$CURRENT_VERSION" >> $GITHUB_ENV
+
+      - name: 🔍 Compare Versions
+        id: compare_versions
+        run: |
+          if [[ "$latest_version" == "$current_version" || "$latest_version" > "$current_version" ]]; then
+            echo "❌ Error: Version ($current_version) needs to be updated."
+            echo "📝 RUN the following commands to fix:"
+            echo "  - pnpm run version:description to create a changeset."
+            echo "  - pnpm run version: to fix the version in the package.json files and commit."
+            exit 1
+          else
+            echo "✅ Valid version ($current_version)."
+          fi

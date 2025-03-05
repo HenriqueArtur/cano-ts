@@ -1,7 +1,9 @@
 name: 🧪 Unit Tests
 
 on:
-  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
 
 jobs:
   unit-tests:
