@@ -41,11 +41,11 @@ jobs:
         id: compare_versions
         run: |
           if [[ "$latest_version" == "$current_version" ]]; then
-            echo "needs_bump=false" >> $GITHUB_ENV  # Versions are equal
+            echo "needs_bump=true" >> $GITHUB_ENV  # Versions are equal
           elif [[ "$latest_version" < "$current_version" ]]; then # String comparison, may not work correctly for all version formats
-            echo "needs_bump=false" >> $GITHUB_ENV
+            echo "needs_bump=true" >> $GITHUB_ENV
           else
-            echo "needs_bump=true" >> $GITHUB_ENV   # latest_version is greater than current_version
+            echo "needs_bump=false" >> $GITHUB_ENV   # latest_version is greater than current_version
           fi
 
       - name: 📂 Get pnpm store directory
