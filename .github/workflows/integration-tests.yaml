@@ -2,7 +2,9 @@ name: 🤡 Integration Tests
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    branches:
+      - main
+
 
 jobs:
   integration-tests:

@@ -90,6 +90,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
+      - name: ✨ Get new version
+        run: |
+          echo "NEW_VERSION=$(jq -r .version ./packages/core/package.json)" >> $GITHUB_ENV
+
       - name: 📥 Install dependencies
         run: pnpm install --filter=@cano-ts/core
 
@@ -117,7 +121,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ env.new_version }}
-          name: Release v${{ env.new_version }}
+          name: Release v${{ env.NEW_VERSION }}
           body_path: ./packages/core/CHANGELOG.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

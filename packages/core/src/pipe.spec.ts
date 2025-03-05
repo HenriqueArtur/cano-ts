@@ -1,5 +1,5 @@
 import { pipe, pipeSync } from "pipe";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 // Sample functions (Sync)
 const add = (x: number, y: number) => x + y;
@@ -52,6 +52,73 @@ describe("pipeSync", () => {
       .result();
 
     expect(result).toBe("**HELLO**");
+  });
+
+  it("should log the value with a custom message", () => {
+    const consoleSpy = vi.spyOn(console, "log");
+
+    const result = pipeSync(10).log("Custom message:");
+
+    expect(consoleSpy).toHaveBeenCalledWith("Custom message:", 10);
+    expect(result).toBeInstanceOf(Object);
+
+    consoleSpy.mockRestore();
+  });
+
+  it("should log the value with default format", () => {
+    const consoleSpy = vi.spyOn(console, "log");
+
+    const result = pipeSync(42).log();
+
+    expect(consoleSpy).toHaveBeenCalledWith("[PipeSync] INITIAL ->", 42);
+    expect(result).toBeInstanceOf(Object);
+
+    consoleSpy.mockRestore();
+  });
+
+  it("should log the intermediate value between next calls", () => {
+    const consoleSpy = vi.spyOn(console, "log");
+
+    const result = pipeSync(5)
+      .next(add, 5) // 5 + 5 = 10
+      .log("Intermediate:") // Should log "Intermediate: 10"
+      .next(multiply, 2) // 10 * 2 = 20
+      .result();
+
+    expect(consoleSpy).toHaveBeenCalledWith("Intermediate:", 10);
+    expect(result).toBe(20);
+
+    consoleSpy.mockRestore();
+  });
+
+  it("should log with anonymous functions between transformations", () => {
+    const consoleSpy = vi.spyOn(console, "log");
+
+    const result = pipeSync(5)
+      .next((x) => x + 5) // 5 + 5 = 10
+      .log() // Should log "[PipeSync] anonymous ->", 10
+      .next((x) => x * 2) // 10 * 2 = 20
+      .result();
+
+    expect(consoleSpy).toHaveBeenCalledWith("[PipeSync] anonymous ->", 10);
+    expect(result).toBe(20);
+
+    consoleSpy.mockRestore();
+  });
+
+  it("should log with anonymous functions and call result after log", () => {
+    const consoleSpy = vi.spyOn(console, "log");
+
+    const result = pipeSync(5)
+      .next((x) => x + 5) // 5 + 5 = 10
+      .next((x) => x * 2) // 10 * 2 = 20
+      .log() // Should log "[PipeSync] anonymous ->", 20
+      .result();
+
+    expect(consoleSpy).toHaveBeenCalledWith("[PipeSync] anonymous ->", 20);
+    expect(result).toBe(20);
+
+    consoleSpy.mockRestore();
   });
 });
 
@@ -110,5 +177,72 @@ describe("pipe (Async)", () => {
     };
 
     await expect(pipe(5).next(failingAsyncFn).result()).rejects.toThrow("Test Error");
+  });
+
+  it("should log the async value with a custom message", async () => {
+    const consoleSpy = vi.spyOn(console, "log");
+
+    const result = await pipe(20).log("Async message:").result();
+
+    expect(consoleSpy).toHaveBeenCalledWith("Async message:", 20);
+    expect(result).toBe(20);
+
+    consoleSpy.mockRestore();
+  });
+
+  it("should log the async value with default format", async () => {
+    const consoleSpy = vi.spyOn(console, "log");
+
+    const result = await pipe(99).log().result();
+
+    expect(consoleSpy).toHaveBeenCalledWith("[PipeAsync] INITIAL ->", 99);
+    expect(result).toBe(99);
+
+    consoleSpy.mockRestore();
+  });
+
+  it("should log the intermediate async value between next calls", async () => {
+    const consoleSpy = vi.spyOn(console, "log");
+
+    const result = await pipe(5)
+      .next(addAsync, 5) // Async: 5 + 5 = 10
+      .log("Async Intermediate:") // Should log "Async Intermediate: 10"
+      .next(multiplyAsync, 2) // Async: 10 * 2 = 20
+      .result();
+
+    expect(consoleSpy).toHaveBeenCalledWith("Async Intermediate:", 10);
+    expect(result).toBe(20);
+
+    consoleSpy.mockRestore();
+  });
+
+  it("should log with anonymous async functions between transformations", async () => {
+    const consoleSpy = vi.spyOn(console, "log");
+
+    const result = await pipe(5)
+      .next(async (x) => x + 5) // Async: 5 + 5 = 10
+      .log() // Should log "[PipeAsync] anonymous ->", 10
+      .next(async (x) => x * 2) // Async: 10 * 2 = 20
+      .result();
+
+    expect(consoleSpy).toHaveBeenCalledWith("[PipeAsync] anonymous ->", 10);
+    expect(result).toBe(20);
+
+    consoleSpy.mockRestore();
+  });
+
+  it("should log with anonymous async functions and call result after log", async () => {
+    const consoleSpy = vi.spyOn(console, "log");
+
+    const result = await pipe(5)
+      .next(async (x) => x + 5) // Async: 5 + 5 = 10
+      .next(async (x) => x * 2) // Async: 10 * 2 = 20
+      .log() // Should log "[PipeAsync] anonymous ->", 20
+      .result(); // Should return 20
+
+    expect(consoleSpy).toHaveBeenCalledWith("[PipeAsync] anonymous ->", 20);
+    expect(result).toBe(20);
+
+    consoleSpy.mockRestore();
   });
 });

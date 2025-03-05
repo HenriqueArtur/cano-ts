@@ -2,7 +2,8 @@ name: 🏷️ Type safe
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    branches:
+      - main
 
 jobs:
   type-safe:
