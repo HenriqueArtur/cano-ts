@@ -22,9 +22,14 @@ class Pipe<T> {
     return instance;
   }
 
-  async log(): Promise<this> {
-    console.log(`[PipeAsync] ${this.lastFnName} ->`, await this.value);
-    return this;
+  log(msg?: string) {
+    return new Pipe(
+      this.value.then(async (val) => {
+        if (msg) console.log(msg, val);
+        else console.log(`[PipeAsync] ${this.lastFnName} ->`, val);
+        return val;
+      }),
+    );
   }
 
   async result(): Promise<T> {
@@ -50,8 +55,9 @@ class PipeSync<T> {
     return instance;
   }
 
-  log(): this {
-    console.log(`[PipeSync] ${this.lastFnName} ->`, this.value);
+  log(msg?: string) {
+    if (msg) console.log(msg, this.value);
+    else console.log(`[PipeSync] ${this.lastFnName} ->`, this.value);
     return this;
   }
 
