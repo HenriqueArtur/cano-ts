@@ -54,6 +54,33 @@ describe("pipeSync", () => {
     expect(result).toBe("**HELLO**");
   });
 
+  it("should process a series of single-argument sync functions correctly", () => {
+    const increment = (x: number) => x + 1;
+    const double = (x: number) => x * 2;
+    const toStringSync = (x: number) => `Value: ${x}`;
+
+    const result = pipeSync(5)
+      .next(increment) // 5 + 1 = 6
+      .next(double) // 6 * 2 = 12
+      .next(toStringSync) // "Value: 12"
+      .result();
+
+    expect(result).toBe("Value: 12");
+  });
+
+  it("should process a series of sync functions with no arguments", () => {
+    const returnFive = () => 5;
+    const toStringSync = (x: number) => `Value: ${x}`;
+
+    const result = pipeSync(0)
+      .next(returnFive)
+      .next(returnFive)
+      .next(toStringSync) // "Value: 5"
+      .result();
+
+    expect(result).toBe("Value: 5");
+  });
+
   it("should log the value with a custom message", () => {
     const consoleSpy = vi.spyOn(console, "log");
 
@@ -169,6 +196,33 @@ describe("pipe (Async)", () => {
       .result();
 
     expect(result).toBe("**HELLO**");
+  });
+
+  it("should process a series of single-argument async functions correctly", async () => {
+    const incrementAsync = async (x: number) => x + 1;
+    const doubleAsync = async (x: number) => x * 2;
+    const toStringAsync = async (x: number) => `Value: ${x}`;
+
+    const result = await pipe(5)
+      .next(incrementAsync) // Async: 5 + 1 = 6
+      .next(doubleAsync) // Async: 6 * 2 = 12
+      .next(toStringAsync) // Async: "Value: 12"
+      .result();
+
+    expect(result).toBe("Value: 12");
+  });
+
+  it("should process a series of async functions with no arguments", async () => {
+    const returnFiveAsync = async () => 5;
+    const toStringAsync = async (x: number) => `Value: ${x}`;
+
+    const result = await pipe(0)
+      .next(returnFiveAsync)
+      .next(returnFiveAsync)
+      .next(toStringAsync)
+      .result();
+
+    expect(result).toBe("Value: 5");
   });
 
   it("should handle async errors", async () => {
