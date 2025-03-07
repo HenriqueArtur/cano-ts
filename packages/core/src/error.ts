@@ -1,6 +1,7 @@
 export class PipeError extends Error {
   constructor(original_error: unknown, history: string[]) {
     super("");
+    this.name = "PipeError";
     Object.setPrototypeOf(this, new.target.prototype);
 
     if (original_error instanceof Error) {
