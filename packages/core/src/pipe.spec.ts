@@ -82,7 +82,7 @@ describe("pipeSync", () => {
   });
 
   it("should log the value with a custom message", () => {
-    const consoleSpy = vi.spyOn(console, "log");
+    const consoleSpy = vi.spyOn(console, "debug");
 
     const result = pipeSync(10).log("Custom message:");
 
@@ -93,7 +93,7 @@ describe("pipeSync", () => {
   });
 
   it("should log the value with default format", () => {
-    const consoleSpy = vi.spyOn(console, "log");
+    const consoleSpy = vi.spyOn(console, "debug");
 
     const result = pipeSync(42).log();
 
@@ -104,7 +104,7 @@ describe("pipeSync", () => {
   });
 
   it("should log the intermediate value between next calls", () => {
-    const consoleSpy = vi.spyOn(console, "log");
+    const consoleSpy = vi.spyOn(console, "debug");
 
     const result = pipeSync(5)
       .next(add, 5) // 5 + 5 = 10
@@ -119,7 +119,7 @@ describe("pipeSync", () => {
   });
 
   it("should log with anonymous functions between transformations", () => {
-    const consoleSpy = vi.spyOn(console, "log");
+    const consoleSpy = vi.spyOn(console, "debug");
 
     const result = pipeSync(5)
       .next((x) => x + 5) // 5 + 5 = 10
@@ -134,7 +134,7 @@ describe("pipeSync", () => {
   });
 
   it("should log with anonymous functions and call result after log", () => {
-    const consoleSpy = vi.spyOn(console, "log");
+    const consoleSpy = vi.spyOn(console, "debug");
 
     const result = pipeSync(5)
       .next((x) => x + 5) // 5 + 5 = 10
@@ -234,7 +234,7 @@ describe("pipe (Async)", () => {
   });
 
   it("should log the async value with a custom message", async () => {
-    const consoleSpy = vi.spyOn(console, "log");
+    const consoleSpy = vi.spyOn(console, "debug");
 
     const result = await pipe(20).log("Async message:").result();
 
@@ -245,7 +245,7 @@ describe("pipe (Async)", () => {
   });
 
   it("should log the async value with default format", async () => {
-    const consoleSpy = vi.spyOn(console, "log");
+    const consoleSpy = vi.spyOn(console, "debug");
 
     const result = await pipe(99).log().result();
 
@@ -256,7 +256,7 @@ describe("pipe (Async)", () => {
   });
 
   it("should log the intermediate async value between next calls", async () => {
-    const consoleSpy = vi.spyOn(console, "log");
+    const consoleSpy = vi.spyOn(console, "debug");
 
     const result = await pipe(5)
       .next(addAsync, 5) // Async: 5 + 5 = 10
@@ -271,7 +271,7 @@ describe("pipe (Async)", () => {
   });
 
   it("should log with anonymous async functions between transformations", async () => {
-    const consoleSpy = vi.spyOn(console, "log");
+    const consoleSpy = vi.spyOn(console, "debug");
 
     const result = await pipe(5)
       .next(async (x) => x + 5) // Async: 5 + 5 = 10
@@ -286,7 +286,7 @@ describe("pipe (Async)", () => {
   });
 
   it("should log with anonymous async functions and call result after log", async () => {
-    const consoleSpy = vi.spyOn(console, "log");
+    const consoleSpy = vi.spyOn(console, "debug");
 
     const result = await pipe(5)
       .next(async (x) => x + 5) // Async: 5 + 5 = 10

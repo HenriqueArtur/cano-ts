@@ -1,34 +1,55 @@
-import type { AsyncPipeFn, SyncPipeFn } from "types";
+import { PipeError } from "error";
+import type { AsyncPipeFn, PipeConfig, PipeConfigArg, SyncPipeFn } from "types";
 
-export function pipe<T>(value: T) {
-  return new Pipe(value);
+// Sync //
+
+export function pipe<T>(value: T, config?: PipeConfigArg) {
+  return new Pipe(value, setConfig(config));
 }
+
 class Pipe<T> {
   private value: Promise<T>;
-  private lastFnName = "INITIAL";
+  private fnHistory: string[];
+  private config: PipeConfig;
 
-  constructor(initialValue: T | Promise<T>) {
+  constructor(initialValue: T | Promise<T>, config: PipeConfig, fnHistory: string[] = []) {
     this.value = Promise.resolve(initialValue);
+    this.config = config;
+    this.fnHistory = fnHistory;
   }
 
   next<U, Args extends unknown[]>(fn: AsyncPipeFn<T, U, Args>, ...args: Args): Pipe<U> {
-    const instance = new Pipe(
-      this.value.then((value) => {
-        const result = fn(value, ...args);
-        return Promise.resolve(result);
-      }),
-    );
-    instance.lastFnName = fn.name || "anonymous";
-    return instance;
+    const fnName = fn.name || "anonymous";
+    const newHistory = [...this.fnHistory, fnName];
+    try {
+      return new Pipe(
+        this.value.then((value) => {
+          const result = fn(value, ...args);
+          return Promise.resolve(result);
+        }),
+        this.config,
+        newHistory,
+      );
+    } catch (err) {
+      if (this.config.usePipeError) throw new PipeError(err, newHistory);
+      throw err;
+    }
   }
 
   log(msg?: string) {
     return new Pipe(
       this.value.then(async (val) => {
-        if (msg) console.log(msg, val);
-        else console.log(`[PipeAsync] ${this.lastFnName} ->`, val);
+        if (this.fnHistory.length === 0) {
+          if (msg) console.debug(msg, val);
+          else console.debug("[PipeAsync] INITIAL ->", val);
+          return val;
+        }
+        if (msg) console.debug(msg, val);
+        else console.debug(`[PipeAsync] ${this.fnHistory[this.fnHistory.length - 1]} ->`, val);
         return val;
       }),
+      this.config,
+      this.fnHistory,
     );
   }
 
@@ -37,31 +58,53 @@ class Pipe<T> {
   }
 }
 
-export function pipeSync<T>(value: T) {
-  return new PipeSync(value);
+// Async //
+
+export function pipeSync<T>(value: T, config?: PipeConfigArg) {
+  return new PipeSync(value, setConfig(config));
 }
 
 class PipeSync<T> {
   private value: T;
-  private lastFnName = "INITIAL";
+  private fnHistory: string[];
+  private config: PipeConfig;
 
-  constructor(initialValue: T) {
+  constructor(initialValue: T, config: PipeConfig, fnHistory: string[] = []) {
     this.value = initialValue;
+    this.config = config;
+    this.fnHistory = fnHistory;
   }
 
   next<U, Args extends unknown[]>(fn: SyncPipeFn<T, U, Args>, ...args: Args): PipeSync<U> {
-    const instance = new PipeSync(fn(this.value, ...args));
-    instance.lastFnName = fn.name || "anonymous";
-    return instance;
+    const newHistory = [...this.fnHistory, fn.name || "anonymous"];
+    try {
+      return new PipeSync(fn(this.value, ...args), this.config, newHistory);
+    } catch (err) {
+      if (this.config.usePipeError) throw new PipeError(err, newHistory);
+      throw err;
+    }
   }
 
   log(msg?: string) {
-    if (msg) console.log(msg, this.value);
-    else console.log(`[PipeSync] ${this.lastFnName} ->`, this.value);
+    if (this.fnHistory.length === 0) {
+      if (msg) console.debug(msg, this.value);
+      else console.debug("[PipeSync] INITIAL ->", this.value);
+      return this;
+    }
+    if (msg) console.debug(msg, this.value);
+    else console.debug(`[PipeSync] ${this.fnHistory[this.fnHistory.length - 1]} ->`, this.value);
     return this;
   }
 
   result(): T {
     return this.value;
   }
+}
+
+// CONFIG //
+function setConfig(config?: PipeConfigArg): PipeConfig {
+  if (!config) return { usePipeError: true };
+  return {
+    usePipeError: config.usePipeError ?? true,
+  };
 }
