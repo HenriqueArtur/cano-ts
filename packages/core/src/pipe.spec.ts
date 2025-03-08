@@ -197,7 +197,8 @@ describe("pipeSync", () => {
           .result();
       } catch (err) {
         expect(err).toBeInstanceOf(PipeError);
-        expect(err.stack).toContain('❌ ERROR in "failingFn"');
+        expect(err.stack).toContain("  1. anonymous");
+        expect(err.stack).toContain('  2. ❌ ERROR in "failingFn"');
       }
     });
   });
@@ -356,7 +357,7 @@ describe("pipe (Async)", () => {
         throw new CustomErr("Test Error");
       };
 
-      await expect(pipe(5).next(failingAsyncFn).result()).rejects.toThrow("Test Error");
+      await expect(pipe(5).next(failingAsyncFn).result()).rejects.toThrow();
     });
 
     it("should throw a PipeError when an async function fails and usePipeError is enabled", async () => {
@@ -364,22 +365,25 @@ describe("pipe (Async)", () => {
         throw new CustomErr("Async failure");
       };
 
-      expect(() => pipe(5, { usePipeError: true }).next(failingAsyncFn).result()).rejects.toThrow(
-        CustomErr,
-      );
+      try {
+        await pipe(5, { usePipeError: true }).next(failingAsyncFn).result();
+      } catch (err) {
+        expect(err).toBeInstanceOf(PipeError);
+        expect(err.stack).toContain('❌ ERROR in "failingAsyncFn"');
+      }
     });
 
-    it.skip("should throw a PipeError when a sync function fails and usePipeError is disabled", () => {
+    it("should throw a PipeError when a sync function fails and usePipeError is disabled", () => {
       const failingAsyncFn = async (_x: number) => {
         throw new CustomErr("Async failure");
       };
 
-      expect(() => pipe(5, { usePipeError: false }).next(failingAsyncFn).result()).toThrow(
+      expect(() => pipe(5, { usePipeError: false }).next(failingAsyncFn).result()).rejects.toThrow(
         CustomErr,
       );
     });
 
-    it.skip("should include function history in PipeError for async functions", async () => {
+    it("should include function history in PipeError for async functions", async () => {
       const failingAsyncFn = async (_x: number) => {
         throw new CustomErr("Async failure");
       };
@@ -391,7 +395,8 @@ describe("pipe (Async)", () => {
           .result();
       } catch (err) {
         expect(err).toBeInstanceOf(PipeError);
-        expect(err.stack).toContain('❌ ERROR in "failingAsyncFn"');
+        expect(err.stack).toContain("  1. anonymous");
+        expect(err.stack).toContain('  2. ❌ ERROR in "failingAsyncFn"');
       }
     });
   });

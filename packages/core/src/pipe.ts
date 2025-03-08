@@ -21,19 +21,19 @@ class Pipe<T> {
   next<U, Args extends unknown[]>(fn: AsyncPipeFn<T, U, Args>, ...args: Args): Pipe<U> {
     const fnName = fn.name || "anonymous";
     const newHistory = [...this.fnHistory, fnName];
-    try {
-      return new Pipe(
-        this.value.then((value) => {
+    return new Pipe(
+      this.value
+        .then((value) => {
           const result = fn(value, ...args);
           return Promise.resolve(result);
+        })
+        .catch((err) => {
+          if (this.config.usePipeError) throw new PipeError(err, newHistory);
+          throw err;
         }),
-        this.config,
-        newHistory,
-      );
-    } catch (err) {
-      if (this.config.usePipeError) throw new PipeError(err, newHistory);
-      throw err;
-    }
+      this.config,
+      newHistory,
+    );
   }
 
   log(msg?: string) {
