@@ -68,11 +68,12 @@ jobs:
         id: check_version
         run: |
           git fetch --tags
-          LATEST_TAG=$(git tag --sort=-v:refname | head -n 1 | sed 's/v//')
+          LATEST_VERSION=$(npm show $(jq -r .name package.json) version || echo "0.1.0")
+          echo "latest_version=$LATEST_VERSION" >> $GITHUB_ENV
           CURRENT_VERSION=$(jq -r .version ./packages/core/package.json)
-          echo "Latest tag: $LATEST_TAG, Current version: $CURRENT_VERSION"
+          echo "current_version=$CURRENT_VERSION" >> $GITHUB_ENV
 
-          if [ "$LATEST_TAG" == "$CURRENT_VERSION" ]; then
+          if [ "$LATEST_VERSION" == "$CURRENT_VERSION" ]; then
             echo "No new version detected. Skipping publish."
             echo "SKIP_PUBLISH=true" >> $GITHUB_ENV
           fi
