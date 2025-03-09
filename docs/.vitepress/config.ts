@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "cano-ts",
+  title: "Cano Ts",
   description: "A lightweight utility, inspired by Elixir’s pipe operator |>, for composing sync and async functions in a clean, readable pipeline. ",
   head: [
     [
@@ -20,10 +20,10 @@ export default defineConfig({
     sidebar: [
       {
         items: [
-          { text: 'Introduction', link: '/index' },
-          { text: 'Get Started', link: '/get-started' },
-          { text: 'Piping', link: '/piping' },
-          { text: 'Error Handling', link: '/error' },
+          { text: '📚 Introduction', link: '/index' },
+          { text: '🚀 Get Started', link: '/get-started' },
+          { text: '👽️ API', link: '/api' },
+          { text: '🥅 Error Handling', link: '/error' },
         ]
       }
     ],

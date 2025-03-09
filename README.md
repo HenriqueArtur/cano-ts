@@ -1,4 +1,4 @@
-<h1 align="center">cano-ts</h1>
+<h1 align="center">Cano Ts</h1>
 
 <p align="center">
 A lightweight utility, inspired by <a href="https://hexdocs.pm/elixir/Kernel.html#%7C%3E/2" target="_blank">Elixir’s pipe operator |></a>, for composing sync and async functions in a clean, readable pipeline. 
@@ -30,7 +30,7 @@ A lightweight utility, inspired by <a href="https://hexdocs.pm/elixir/Kernel.htm
   </a>
 </p>
 
-📚 **Full Documentation**: [cano-ts Docs]()
+📚 **Full Documentation**: [Cano Ts Docs](https://HenriqueArtur.github.io/cano-ts/)
 
 ## 🚀 Get Started
 ```typescript
@@ -51,7 +51,7 @@ console.log(result); // "Result: 16"
 
 ## 📖 About cano-ts
 
-When working with transformations in **JavaScript** and **TypeScript**, we often end up with deeply nested function calls or complex `.then()` chains for asynchronous operations. **cano-ts** solves this problem by introducing a *fluent, pipeline-based API for function chaining*.
+When working with transformations in **JavaScript** and **TypeScript**, we often end up with deeply nested function calls or complex `.then()` chains for asynchronous operations. **Cano Ts** solves this problem by introducing a *fluent, pipeline-based API for function chaining*.
 
 ```typescript
 /* BEFORE: Traditional Promise Chaining */
