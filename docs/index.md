@@ -1,36 +1,5 @@
-<h1 align="center">cano-ts</h1>
+# Cano TS
 
-<p align="center">
-A lightweight utility, inspired by <a href="https://hexdocs.pm/elixir/Kernel.html#%7C%3E/2" target="_blank">Elixir’s pipe operator |></a>, for composing sync and async functions in a clean, readable pipeline. 
-</p>
-
-<p align="center">
-  <a href="https://www.npmjs.com/package/cano-ts" target="_blank">
-    <img src="https://img.shields.io/npm/v/cano-ts.svg" alt="npm version" height="18">
-  </a>
-  <a href="https://github.com/HenriqueArtur/cano-ts" target="_blank">
-    <img src="https://img.shields.io/npm/l/cano-ts.svg" alt="MIT license" height="18">
-  </a>
-  <a href="https://gitmoji.dev">
-    <img
-      src="https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg"
-      alt="Gitmoji"
-    />
-  </a>
-</p>
-<p align="center">
-  <a href="https://github.com/HenriqueArtur/cano-ts/actions/workflows/unit-tests.yaml">
-    <img src="https://github.com/HenriqueArtur/cano-ts/actions/workflows/unit-tests.yaml/badge.svg" alt="tests">
-  </a>
-  <a href="https://github.com/HenriqueArtur/cano-ts/actions/workflows/test-build.yaml">
-    <img src="https://github.com/HenriqueArtur/cano-ts/actions/workflows/test-build.yaml/badge.svg" alt="tests">
-  </a>
-  <a href="https://github.com/HenriqueArtur/cano-ts/actions/workflows/type-safe.yaml">
-    <img src="https://github.com/HenriqueArtur/cano-ts/actions/workflows/type-safe.yaml/badge.svg" alt="tests">
-  </a>
-</p>
-
-📚 **Full Documentation**: [cano-ts Docs]()
 
 ## 🚀 Get Started
 ```typescript
@@ -105,4 +74,3 @@ pnpm add cano-ts
 # OR
 yarn add cano-ts
 ```
-<p align="center"> Made with 💜 by <a href="https://github.com/HenriqueArtur" target="_blank">Henrique Artur</a></p>

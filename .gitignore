@@ -133,3 +133,8 @@ dist
 # remove for tests
 packages/test-app/libs/**
 !packages/test-app/libs/.gitkeep
+
+## vitepress
+docs/.vitepress/dist
+docs/.vitepress/cache
+

@@ -48,7 +48,10 @@
     "test:type": "pnpm run --filter=@cano-ts/core test:type",
     "update:version": "tsx ./scripts/update-global-version.ts",
     "version": "pnpm changeset version && pnpm run update:version",
-    "version:description": "pnpm changeset"
+    "version:description": "pnpm changeset",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
