@@ -1,6 +1,6 @@
 {
   "name": "cano-ts",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "",
   "license": "MIT",
   "keywords": [
@@ -48,7 +48,10 @@
     "test:type": "pnpm run --filter=@cano-ts/core test:type",
     "update:version": "tsx ./scripts/update-global-version.ts",
     "version": "pnpm changeset version && pnpm run update:version",
-    "version:description": "pnpm changeset"
+    "version:description": "pnpm changeset",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
@@ -56,6 +59,7 @@
     "@types/node": "catalog:",
     "husky": "catalog:",
     "tsx": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitepress": "^1.6.3"
   }
 }

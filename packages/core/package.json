@@ -1,6 +1,6 @@
 {
   "name": "@cano-ts/core",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "",
   "license": "MIT",
   "keywords": ["pipe", "operator", "elixir", "functional", "typescript"],
@@ -37,8 +37,6 @@
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
-    "@rollup/plugin-commonjs": "catalog:",
-    "@rollup/plugin-json": "catalog:",
     "@rollup/plugin-typescript": "catalog:",
     "@types/node": "catalog:",
     "rollup": "catalog:",
