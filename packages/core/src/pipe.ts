@@ -1,8 +1,40 @@
 import { PipeError } from "error";
 import type { AsyncPipeFn, PipeConfig, PipeConfigArg, SyncPipeFn } from "types";
 
-// Sync //
+function setConfig(config?: PipeConfigArg): PipeConfig {
+  if (!config) return { usePipeError: true };
+  return {
+    usePipeError: config.usePipeError ?? true,
+  };
+}
 
+/**
+ * Creates an asynchronous pipeline that allows chaining async functions.
+ *
+ * This function initializes a pipeline with an initial value and allows
+ * chaining of asynchronous functions using `.next()`. Use `.result()` to
+ * retrieve the final computed value.
+ *
+ * @param value - The initial value to be processed in the pipeline.
+ * @param config - Optional configuration for error handling.
+ * @returns A Pipe instance that allows chaining async operations.
+ *
+ * @example
+ * async function double(x: number) {
+ *   return x * 2;
+ * }
+ *
+ * async function increment(x: number) {
+ *   return x + 1;
+ * }
+ *
+ * const result = await pipe(5)
+ *   .next(double)
+ *   .next(increment)
+ *   .result();
+ *
+ * console.log(result); // 11
+ */
 export function pipe<T>(value: T, config?: PipeConfigArg) {
   return new Pipe(value, setConfig(config));
 }
@@ -58,8 +90,33 @@ class Pipe<T> {
   }
 }
 
-// Async //
-
+/**
+ * Creates a synchronous pipeline that allows chaining synchronous functions.
+ *
+ * This function initializes a pipeline with an initial value and allows
+ * chaining of synchronous functions using `.next()`. Use `.result()` to
+ * retrieve the final computed value.
+ *
+ * @param value - The initial value to be processed in the pipeline.
+ * @param config - Optional configuration for error handling.
+ * @returns A PipeSync instance that allows chaining synchronous operations.
+ *
+ * @example
+ * function double(x: number) {
+ *   return x * 2;
+ * }
+ *
+ * function increment(x: number) {
+ *   return x + 1;
+ * }
+ *
+ * const result = pipeSync(5)
+ *   .next(double)
+ *   .next(increment)
+ *   .result();
+ *
+ * console.log(result); // 11
+ */
 export function pipeSync<T>(value: T, config?: PipeConfigArg) {
   return new PipeSync(value, setConfig(config));
 }
@@ -99,12 +156,4 @@ class PipeSync<T> {
   result(): T {
     return this.value;
   }
-}
-
-// CONFIG //
-function setConfig(config?: PipeConfigArg): PipeConfig {
-  if (!config) return { usePipeError: true };
-  return {
-    usePipeError: config.usePipeError ?? true,
-  };
 }
