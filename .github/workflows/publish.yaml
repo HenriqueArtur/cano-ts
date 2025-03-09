@@ -168,7 +168,7 @@ jobs:
         run: pnpm run docs:build
 
       - name: 📂 Upload Docs Artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v4
         with:
           path: ./docs/.vitepress/dist
 
