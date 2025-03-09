@@ -1,6 +1,6 @@
 import { PipeError } from "error";
-import { pipe, pipeSync } from "pipe";
 import { describe, expect, it, vi } from "vitest";
+import { pipe, pipeSync } from ".";
 
 // Sample functions (Sync)
 const add = (x: number, y: number) => x + y;
