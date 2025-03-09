@@ -4,6 +4,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "Cano Ts",
   description: "A lightweight utility, inspired by Elixir’s pipe operator |>, for composing sync and async functions in a clean, readable pipeline. ",
+  base: "/cano-ts/",
   head: [
     [
       "link",
