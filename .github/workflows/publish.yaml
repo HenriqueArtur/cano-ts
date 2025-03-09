@@ -64,6 +64,19 @@ jobs:
     needs: test  # Runs only if testing is successful
     timeout-minutes: 2
     steps:
+      - name: ⏭️ Skip if Version Unchanged
+        id: check_version
+        run: |
+          git fetch --tags
+          LATEST_TAG=$(git tag --sort=-v:refname | head -n 1 | sed 's/v//')
+          CURRENT_VERSION=$(jq -r .version ./packages/core/package.json)
+          echo "Latest tag: $LATEST_TAG, Current version: $CURRENT_VERSION"
+
+          if [ "$LATEST_TAG" == "$CURRENT_VERSION" ]; then
+            echo "No new version detected. Skipping publish."
+            echo "SKIP_PUBLISH=true" >> $GITHUB_ENV
+          fi
+
       - name: 🔄 Checkout code
         uses: actions/checkout@v4
         with:
@@ -114,12 +127,14 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: 🚀 Publish to npm
+        if: env.SKIP_PUBLISH != 'true'
         run: npm publish --access public
         working-directory: dist
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: 📝 Create GitHub Release
+        if: env.SKIP_PUBLISH != 'true'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ env.new_version }}
