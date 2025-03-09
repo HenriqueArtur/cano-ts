@@ -54,6 +54,14 @@ export function FactoryRollupConfigsObject(output_dir) {
             fs.writeFileSync(pkg_path, JSON.stringify(pkg_widout_prepare, null, 2));
           },
         },
+        {
+          name: "copy-readme",
+          buildEnd() {
+            const readme_src = path.join("..", "..", "README.md");
+            const readme_dest = path.join(output_dir, "README.md");
+            fs.copyFileSync(readme_src, readme_dest);
+          },
+        },
       ],
     },
     {

@@ -67,7 +67,6 @@ jobs:
       - name: ⏭️ Skip if Version Unchanged
         id: check_version
         run: |
-          git fetch --tags
           LATEST_VERSION=$(npm show $(jq -r .name package.json) version || echo "0.1.0")
           echo "latest_version=$LATEST_VERSION" >> $GITHUB_ENV
           CURRENT_VERSION=$(jq -r .version ./packages/core/package.json)

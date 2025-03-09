@@ -1,5 +1,11 @@
 # @cano-ts/core
 
+## 1.0.1
+
+### Patch Changes
+
+- fixing build
+
 ## 1.0.0
 
 ### Major Changes
