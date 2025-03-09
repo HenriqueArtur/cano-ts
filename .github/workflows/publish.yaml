@@ -64,19 +64,6 @@ jobs:
     needs: test  # Runs only if testing is successful
     timeout-minutes: 2
     steps:
-      - name: ⏭️ Skip if Version Unchanged
-        id: check_version
-        run: |
-          LATEST_VERSION=$(npm show $(jq -r .name package.json) version || echo "0.1.0")
-          echo "latest_version=$LATEST_VERSION" >> $GITHUB_ENV
-          CURRENT_VERSION=$(jq -r .version ./packages/core/package.json)
-          echo "current_version=$CURRENT_VERSION" >> $GITHUB_ENV
-
-          if [ "$LATEST_VERSION" == "$CURRENT_VERSION" ]; then
-            echo "No new version detected. Skipping publish."
-            echo "SKIP_PUBLISH=true" >> $GITHUB_ENV
-          fi
-
       - name: 🔄 Checkout code
         uses: actions/checkout@v4
         with:
@@ -104,6 +91,19 @@ jobs:
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
+
+      - name: ⏭️ Skip if Version Unchanged
+        id: check_version
+        run: |
+          LATEST_VERSION=$(npm show $(jq -r .name package.json) version || echo "0.1.0")
+          echo "latest_version=$LATEST_VERSION" >> $GITHUB_ENV
+          CURRENT_VERSION=$(jq -r .version ./packages/core/package.json)
+          echo "current_version=$CURRENT_VERSION" >> $GITHUB_ENV
+
+          if [ "$LATEST_VERSION" == "$CURRENT_VERSION" ]; then
+            echo "No new version detected. Skipping publish."
+            echo "SKIP_PUBLISH=true" >> $GITHUB_ENV
+          fi
 
       - name: ✨ Get new version
         run: |
