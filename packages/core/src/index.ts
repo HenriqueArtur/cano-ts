@@ -1,4 +1,5 @@
 import { PipeError } from "error";
+export * as Enum from "./enum";
 
 interface PipeConfigArg {
   usePipeError?: boolean;

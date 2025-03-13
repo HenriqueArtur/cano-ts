@@ -49,7 +49,7 @@ const some = <T>(list: T[], predicate: (value: T, index: number, array: T[]) => 
 const sort = <T>(list: T[], compareFn?: ((a: T, b: T) => number) | undefined): T[] =>
   list.sort(compareFn);
 
-export const E = {
+export default {
   concat,
   every,
   filter,
