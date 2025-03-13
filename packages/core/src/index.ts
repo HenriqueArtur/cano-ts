@@ -1,5 +1,10 @@
 import { PipeError } from "error";
-import type { AsyncPipeFn, PipeConfig, PipeConfigArg, SyncPipeFn } from "types";
+
+interface PipeConfigArg {
+  usePipeError?: boolean;
+}
+
+type PipeConfig = Required<PipeConfigArg>;
 
 function setConfig(config?: PipeConfigArg): PipeConfig {
   if (!config) return { usePipeError: true };
@@ -38,6 +43,8 @@ function setConfig(config?: PipeConfigArg): PipeConfig {
 export function pipe<T>(value: T, config?: PipeConfigArg) {
   return new Pipe(value, setConfig(config));
 }
+
+type SyncPipeFn<T, U, Args extends unknown[]> = (arg: T, ...args: Args) => U;
 
 class Pipe<T> {
   private value: Promise<T>;
@@ -120,6 +127,8 @@ class Pipe<T> {
 export function pipeSync<T>(value: T, config?: PipeConfigArg) {
   return new PipeSync(value, setConfig(config));
 }
+
+type AsyncPipeFn<T, U, Args extends unknown[]> = (arg: T, ...args: Args) => U | Promise<U>;
 
 class PipeSync<T> {
   private value: T;
