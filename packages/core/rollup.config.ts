@@ -1,5 +1,5 @@
 import path from "node:path";
-import { FactoryRollupConfigsObject } from "./rollup-obj.js";
+import { FactoryRollupConfigsObject } from "./rollup-obj.ts";
 
 const dist = path.join("..", "..", "./dist");
 
