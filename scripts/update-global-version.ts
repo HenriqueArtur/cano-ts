@@ -29,8 +29,7 @@ function updateGlobalVersion() {
   execSync("git add .", { stdio: "inherit" });
 
   console.log(`✏️ Committing changes with message: "🔖 \`v${version}\`"`);
-  const version_parsed = "`v" + version + "`"
-  execSync(`git commit -m "🔖 ${version_parsed}"`, { stdio: "inherit" });
+  execSync(`git commit -m "🔖 v${version}"`, { stdio: "inherit" });
 
   console.log("✔️ Version update completed successfully.");
 }
