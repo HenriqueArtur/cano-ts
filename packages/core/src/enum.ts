@@ -5,10 +5,10 @@ const every = <T>(
   predicate: (value: T, index?: number, array?: readonly T[]) => boolean,
 ): boolean => list.every(predicate);
 
-const filter = <T, S extends T>(
+const filter = <T>(
   list: T[],
-  predicate: (value: T, index?: number, array?: readonly T[]) => value is S,
-): S[] => list.filter(predicate);
+  predicate: (value: T, index?: number, array?: readonly T[]) => boolean,
+): T[] => list.filter(predicate);
 
 const find = <T>(
   list: T[],
@@ -22,20 +22,22 @@ const includes = <T>(list: T[], searchElement: T, fromIndex?: number): boolean =
 
 const join = <T>(list: T[], separator?: string): string => list.join(separator);
 
-const map = <T, U>(
+function map<T, U>(
   list: T[],
   callback: (value: T, index?: number, array?: readonly T[]) => U,
-): U[] => list.map(callback);
+): U[] {
+  return list.map(callback);
+}
 
 const reduce = <T, U>(
   list: T[],
-  callback: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U,
-  initialValue?: U,
-) => list.reduce(callback, initialValue);
+  callback: (previousValue: U, currentValue: T, currentIndex: number, array: readonly T[]) => U,
+  initialValue: U,
+): U => list.reduce(callback, initialValue);
 
 const reduceRight = <T, U>(
   list: T[],
-  callback: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U,
+  callback: (previousValue: U, currentValue: T, currentIndex: number, array: readonly T[]) => U,
   initialValue?: U,
 ) => list.reduceRight(callback, initialValue);
 
@@ -43,8 +45,10 @@ const reverse = <T>(list: T[]): T[] => list.reverse();
 
 const slice = <T>(list: T[], start?: number, end?: number) => list.slice(start, end);
 
-const some = <T>(list: T[], predicate: (value: T, index: number, array: T[]) => boolean): boolean =>
-  list.some(predicate);
+const some = <T>(
+  list: T[],
+  predicate: (value: T, index: number, array: readonly T[]) => boolean,
+): boolean => list.some(predicate);
 
 const sort = <T>(list: T[], compareFn?: ((a: T, b: T) => number) | undefined): T[] =>
   list.sort(compareFn);
