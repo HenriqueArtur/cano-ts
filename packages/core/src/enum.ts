@@ -13,8 +13,7 @@ const filter = <T>(
 const find = <T>(
   list: T[],
   predicate: (value: T, index?: number, array?: readonly T[]) => boolean,
-): T | unknown => list.find(predicate);
-
+): T | undefined => list.find(predicate);
 const flat = <T>(list: T[], depth?: number) => list.flat(depth);
 
 const includes = <T>(list: T[], searchElement: T, fromIndex?: number): boolean =>
