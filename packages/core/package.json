@@ -1,15 +1,15 @@
 {
   "name": "@cano-ts/core",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "",
   "license": "MIT",
   "keywords": ["pipe", "operator", "elixir", "functional", "typescript"],
   "author": "Henrique Artur <contato@henriqueartur.com>",
-  "contributors": [],
   "repository": {
     "type": "git",
     "url": "https://github.com/HenriqueArtur/cano-ts"
   },
+  "homepage": "https://henriqueartur.github.io/cano-ts/",
   "packageManager": "pnpm@10.5.2",
   "type": "module",
   "main": "index.mjs",

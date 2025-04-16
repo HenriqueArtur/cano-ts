@@ -1,5 +1,11 @@
 # @cano-ts/core
 
+## 1.1.0
+
+### Minor Changes
+
+- Enumerable functions
+
 ## 1.0.1
 
 ### Patch Changes

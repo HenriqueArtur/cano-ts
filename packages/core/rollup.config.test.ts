@@ -1,3 +1,3 @@
-import { FactoryRollupConfigsObject } from "./rollup-obj.js";
+import { FactoryRollupConfigsObject } from "./rollup-obj.ts";
 
 export default FactoryRollupConfigsObject("./test/dist");

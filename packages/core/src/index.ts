@@ -1,5 +1,11 @@
 import { PipeError } from "error";
-import type { AsyncPipeFn, PipeConfig, PipeConfigArg, SyncPipeFn } from "types";
+export * as E from "./enum";
+
+interface PipeConfigArg {
+  usePipeError?: boolean;
+}
+
+type PipeConfig = Required<PipeConfigArg>;
 
 function setConfig(config?: PipeConfigArg): PipeConfig {
   if (!config) return { usePipeError: true };
@@ -39,6 +45,8 @@ export function pipe<T>(value: T, config?: PipeConfigArg) {
   return new Pipe(value, setConfig(config));
 }
 
+type AsyncPipeFn<T, U, Args extends unknown[]> = (arg: T, ...args: Args) => U | Promise<U>;
+
 class Pipe<T> {
   private value: Promise<T>;
   private fnHistory: string[];
@@ -53,6 +61,7 @@ class Pipe<T> {
   next<U, Args extends unknown[]>(fn: AsyncPipeFn<T, U, Args>, ...args: Args): Pipe<U> {
     const fnName = fn.name || "anonymous";
     const newHistory = [...this.fnHistory, fnName];
+
     return new Pipe(
       this.value
         .then((value) => {
@@ -121,6 +130,8 @@ export function pipeSync<T>(value: T, config?: PipeConfigArg) {
   return new PipeSync(value, setConfig(config));
 }
 
+type SyncPipeFn<T, U, Args extends unknown[]> = (arg: T, ...args: Args) => U;
+
 class PipeSync<T> {
   private value: T;
   private fnHistory: string[];
@@ -135,7 +146,7 @@ class PipeSync<T> {
   next<U, Args extends unknown[]>(fn: SyncPipeFn<T, U, Args>, ...args: Args): PipeSync<U> {
     const newHistory = [...this.fnHistory, fn.name || "anonymous"];
     try {
-      return new PipeSync(fn(this.value, ...args), this.config, newHistory);
+      return new PipeSync(fn(this.value, ...args) as U, this.config, newHistory);
     } catch (err) {
       if (this.config.usePipeError) throw new PipeError(err, newHistory);
       throw err;
