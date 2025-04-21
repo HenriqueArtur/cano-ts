@@ -78,11 +78,11 @@ function copyPkg(output_dir) {
   for (const key in devDependencies) {
     parsed_dev_dependencies[key] = resolved_cano_ts.devDependencies[key].version;
   }
-  const pkg_widout_prepare = {
+  const pkg_without_prepare = {
     name: PKG_NAME,
     ...pkg,
     scripts: pkg_scripts,
     devDependencies: parsed_dev_dependencies,
   };
-  fs.writeFileSync(pkg_path, JSON.stringify(pkg_widout_prepare, null, 2));
+  fs.writeFileSync(pkg_path, JSON.stringify(pkg_without_prepare, null, 2));
 }
