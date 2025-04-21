@@ -1,5 +1,5 @@
 import { execSync } from "node:child_process";
-import { copyFileSync, existsSync, mkdirSync, readdirSync, rmSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readdirSync, rmSync, statSync } from "node:fs";
 import path from "node:path";
 
 const ROOT_DIR = process.cwd();
@@ -28,8 +28,11 @@ function prepareTestApp() {
       const srcPath = path.join(src, file);
       const destPath = path.join(dest, file);
 
-      if (existsSync(srcPath) && !existsSync(destPath)) {
+      const stats = statSync(srcPath);
+      if (stats.isFile()) {
         copyFileSync(srcPath, destPath);
+      } else if (stats.isDirectory()) {
+        copyRecursive(srcPath, destPath);
       }
     }
   }
