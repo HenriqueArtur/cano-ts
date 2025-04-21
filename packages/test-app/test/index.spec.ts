@@ -1,6 +1,5 @@
 // @ts-expect-error - We expect this to fail if imported
-import { Pipe, PipeSync, pipe, pipeSync } from "cano-ts";
-import E from "cano-ts/enum";
+import { E, Pipe, PipeSync, pipe, pipeSync } from "cano-ts";
 import { describe, expect, it } from "vitest";
 
 describe("cano-ts exports", () => {

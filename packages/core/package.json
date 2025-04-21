@@ -1,6 +1,6 @@
 {
   "name": "@cano-ts/core",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "",
   "license": "MIT",
   "keywords": ["pipe", "operator", "elixir", "functional", "typescript"],
@@ -11,19 +11,19 @@
   },
   "homepage": "https://henriqueartur.github.io/cano-ts/",
   "packageManager": "pnpm@10.5.2",
-  "type": "module",
-  "main": "index.mjs",
-  "module": "index.mjs",
-  "types": "index.d.ts",
+  "main": "cjs/index.cjs",
+  "module": "esm/index.mjs",
+  "types": "types/index.d.ts",
   "exports": {
     ".": {
-      "import": "./index.mjs",
-      "types": "./index.d.ts",
-      "default": "./index.mjs"
+      "types": "./types/index.d.ts",
+      "require": "./cjs/index.cjs",
+      "import": "./esm/index.mjs"
     },
-    "./*": {
-      "import": "./*.mjs",
-      "types": "./*.d.ts"
+    "./enum": {
+      "types": "./types/enum.d.ts",
+      "require": "./cjs/enum.cjs",
+      "import": "./esm/enum.mjs"
     }
   },
   "scripts": {

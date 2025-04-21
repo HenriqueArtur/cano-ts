@@ -10,8 +10,9 @@ const execPromise = promisify(exec);
 const BUILD_OUTPUT_DIR = "dist";
 
 describe("Rollup Build", () => {
-  const esm_dir = join(__dirname, `${BUILD_OUTPUT_DIR}`);
-  const types_dir = join(__dirname, `${BUILD_OUTPUT_DIR}`);
+  const esm_dir = join(__dirname, `${BUILD_OUTPUT_DIR}`, "esm");
+  const cjs_dir = join(__dirname, `${BUILD_OUTPUT_DIR}`, "cjs");
+  const types_dir = join(__dirname, `${BUILD_OUTPUT_DIR}`, "types");
   const pkg_json_dir = join(__dirname, `${BUILD_OUTPUT_DIR}`);
 
   beforeAll(async () => {
@@ -21,6 +22,11 @@ describe("Rollup Build", () => {
   it("should create ESM files", async () => {
     const files = await promises.readdir(esm_dir);
     expect(files).toContain("index.mjs");
+  });
+
+  it("should create CJS files", async () => {
+    const files = await promises.readdir(cjs_dir);
+    expect(files).toContain("index.cjs");
   });
 
   it("should create TypeScript declaration file", async () => {
