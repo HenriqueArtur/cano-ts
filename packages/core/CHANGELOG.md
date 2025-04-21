@@ -1,5 +1,11 @@
 # @cano-ts/core
 
+## 1.2.0
+
+### Minor Changes
+
+- Lib export as `cjs` and `esm`
+
 ## 1.1.0
 
 ### Minor Changes
