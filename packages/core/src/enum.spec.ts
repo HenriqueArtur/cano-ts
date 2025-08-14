@@ -147,7 +147,7 @@ describe("Pipe Integration with um Functions", () => {
       .log("Initial Array") // Log initial value
       .next(E.map, (n: number) => n * 2)
       .log("After Doubling") // Log after map
-      .next(E.reduce, (acc: number, n) => acc + n, 0)
+      .next(E.reduce, (acc: number, n: number) => acc + n, 0)
       .log("Final Result")
       .result();
 

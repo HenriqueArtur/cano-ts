@@ -8,6 +8,8 @@
     "test": "vitest run"
   },
   "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.0.7"
   }

@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "disableSizeLimit": true,
@@ -8,14 +9,16 @@
     "moduleResolution": "Bundler",
     "target": "es2022",
     "types": ["node"],
-    "baseUrl": "./src",
-    "rootDir": "./src",
-    "strictNullChecks": true,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "composite": true,
+    "incremental": true
   },
-  "include": ["./src/**/*.ts"],
-  "exclude": ["node_modules", "./**.ts", "**/**.config.ts"]
+  "references": [
+    { "path": "./packages/core" },
+    { "path": "./packages/test-app" }
+  ],
+  "files": [],
+  "exclude": ["node_modules", "dist"]
 }

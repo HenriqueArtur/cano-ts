@@ -42,8 +42,8 @@ describe("E module functions (array utilities)", () => {
 
     it("should work with pipes", () => {
       const result = pipeSync([1, 2, 3])
-        .next(E.map, (x) => x * 2)
-        .next(E.map, (x) => x + 1)
+        .next(E.map, (x: number) => x * 2)
+        .next(E.map, (x: number) => x + 1)
         .result();
       expect(result).toEqual([3, 5, 7]);
     });
@@ -74,9 +74,9 @@ describe("E module functions (array utilities)", () => {
 
     it("should work with pipes", () => {
       const result = pipeSync([1, 2, 3, 4, 5])
-        .next(E.filter, (x) => x % 2 === 1) // [1, 3, 5]
-        .next(E.map, (x) => x * 2) // [2, 6, 10]
-        .next(E.reduce, (acc, curr) => acc + curr, 0) // 18
+        .next(E.filter, (x: number) => x % 2 === 1) // [1, 3, 5]
+        .next(E.map, (x: number) => x * 2) // [2, 6, 10]
+        .next(E.reduce, (acc: number, curr: number) => acc + curr, 0) // 18
         .result();
       expect(result).toBe(18);
     });
@@ -135,8 +135,8 @@ describe("E module functions (array utilities)", () => {
 
     it("should work with pipes", () => {
       const result = pipeSync([1, 2, 3, 4])
-        .next(E.map, (x) => x * 2) // [2, 4, 6, 8]
-        .next(E.every, (x) => x % 2 === 0) // true
+        .next(E.map, (x: number) => x * 2) // [2, 4, 6, 8]
+        .next(E.every, (x: number) => x % 2 === 0) // true
         .result();
       expect(result).toBe(true);
     });
@@ -260,10 +260,10 @@ describe("E module functions (array utilities)", () => {
     });
 
     it("should work with pipes", () => {
-      const result = pipeSync([[1, 2], [3, 4]])
-        .next(E.flat) // [1, 2, 3, 4]
-        .next(E.filter, (x) => x % 2 === 0) // [2, 4]
-        .next(E.map, (x) => x * 3) // [6, 12]
+      const flatArray = E.flat([[1, 2], [3, 4]]) as number[]; // [1, 2, 3, 4]
+      const result = pipeSync(flatArray)
+        .next(E.filter, (x: number) => x % 2 === 0) // [2, 4]
+        .next(E.map, (x: number) => x * 3) // [6, 12]
         .result();
       expect(result).toEqual([6, 12]);
     });
@@ -318,7 +318,7 @@ describe("Complex E module pipeline scenarios", () => {
       .next(fetchData) // fetch initial data
       .next(E.filter, (x) => x % 3 === 0) // [3, 6, 9]
       .next(processNumbers) // async processing: [6, 12, 18]
-      .next(E.reduce, (acc, curr) => acc + curr, 0) // sum: 36
+      .next(E.reduce, (acc: number, curr: number) => acc + curr, 0) // sum: 36
       .result();
 
     expect(result).toBe(36);
@@ -331,12 +331,13 @@ describe("Complex E module pipeline scenarios", () => {
       [6, 7, 8, 9],
     ];
 
-    const result = pipeSync(nestedData)
-      .next(E.flat) // [1, 2, 3, 4, 5, 6, 7, 8, 9]
-      .next(E.filter, (x) => x % 2 === 1) // [1, 3, 5, 7, 9]
-      .next(E.map, (x) => x ** 2) // [1, 9, 25, 49, 81]
+    // First flatten, then process with pipes
+    const flatData = E.flat(nestedData) as number[]; // [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    const result = pipeSync(flatData)
+      .next(E.filter, (x: number) => x % 2 === 1) // [1, 3, 5, 7, 9]
+      .next(E.map, (x: number) => x ** 2) // [1, 9, 25, 49, 81]
       .next(E.slice, 1, 4) // [9, 25, 49]
-      .next(E.reduce, (acc, curr) => acc + curr, 0) // 83
+      .next(E.reduce, (acc: number, curr: number) => acc + curr, 0) // 83
       .result();
 
     expect(result).toBe(83);

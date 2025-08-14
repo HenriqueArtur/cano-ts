@@ -37,8 +37,8 @@ const reduce = <T, U>(
 const reduceRight = <T, U>(
   list: T[],
   callback: (previousValue: U, currentValue: T, currentIndex: number, array: readonly T[]) => U,
-  initialValue?: U,
-) => list.reduceRight(callback, initialValue);
+  initialValue: U,
+): U => list.reduceRight(callback, initialValue);
 
 const reverse = <T>(list: T[]): T[] => list.reverse();
 

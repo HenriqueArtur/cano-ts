@@ -17,7 +17,7 @@ Cano TS is a TypeScript library inspired by Elixir's pipe operator (`|>`), provi
 - `pnpm run test:ci` - Runs tests once for CI
 - `pnpm run test:build` - Tests the built library
 - `pnpm run test:integration` - Runs integration tests against test app
-- `pnpm run test:type` - Runs TypeScript type checking
+- `pnpm run test:type` - Runs TypeScript type checking for all projects
 
 ### Linting & Formatting
 - `pnpm run lint` - Runs Biome linting with auto-fix
