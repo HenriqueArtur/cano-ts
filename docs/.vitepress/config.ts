@@ -24,6 +24,7 @@ export default defineConfig({
           { text: '📚 Introduction', link: '/index' },
           { text: '🚀 Get Started', link: '/get-started' },
           { text: '👽️ API', link: '/api' },
+          { text: '🔧 E Module Examples', link: '/examples' },
         ]
       }
     ],

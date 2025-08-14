@@ -133,3 +133,371 @@ After increment: 11```
 The `.result()` method resolves and returns the final computed value in the pipeline.
 - For `pipeSync()`, it returns a synchronous value (`T`).
 - For `pipe()`, it returns a Promise (`Promise<T>`), requiring `await`.
+
+## 🔧 E Module - Array Utilities
+
+The `E` module provides a comprehensive set of functional array operations designed to work seamlessly with Cano TS pipelines. All functions are curried, meaning they can be partially applied with additional arguments.
+
+### Core Transformation Functions
+
+#### `E.map(fn)`
+Transforms each element in an array using the provided function.
+
+```typescript
+import { pipeSync, E } from "cano-ts";
+
+const numbers = [1, 2, 3, 4, 5];
+
+const doubled = pipeSync(numbers)
+  .next(E.map, (x: number) => x * 2)
+  .result();
+
+console.log(doubled); // [2, 4, 6, 8, 10]
+
+// With objects
+const users = [
+  { name: "Alice", age: 25 },
+  { name: "Bob", age: 30 }
+];
+
+const names = pipeSync(users)
+  .next(E.map, (user) => user.name)
+  .result();
+
+console.log(names); // ["Alice", "Bob"]
+```
+
+#### `E.filter(predicate)`
+Filters array elements based on a predicate function.
+
+```typescript
+const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+const evenNumbers = pipeSync(numbers)
+  .next(E.filter, (x: number) => x % 2 === 0)
+  .result();
+
+console.log(evenNumbers); // [2, 4, 6, 8, 10]
+
+// Complex filtering
+const users = [
+  { name: "Alice", age: 25, active: true },
+  { name: "Bob", age: 17, active: false },
+  { name: "Charlie", age: 30, active: true }
+];
+
+const activeAdults = pipeSync(users)
+  .next(E.filter, (user) => user.active && user.age >= 18)
+  .result();
+
+console.log(activeAdults); // [{ name: "Alice", age: 25, active: true }, { name: "Charlie", age: 30, active: true }]
+```
+
+#### `E.reduce(reducer, initialValue)`
+Reduces an array to a single value using a reducer function.
+
+```typescript
+const numbers = [1, 2, 3, 4, 5];
+
+const sum = pipeSync(numbers)
+  .next(E.reduce, (acc: number, curr: number) => acc + curr, 0)
+  .result();
+
+console.log(sum); // 15
+
+// Complex reduction
+const transactions = [
+  { type: "credit", amount: 100 },
+  { type: "debit", amount: 50 },
+  { type: "credit", amount: 75 }
+];
+
+const balance = pipeSync(transactions)
+  .next(E.reduce, (acc, tx) => {
+    return tx.type === "credit" ? acc + tx.amount : acc - tx.amount;
+  }, 0)
+  .result();
+
+console.log(balance); // 125
+```
+
+#### `E.find(predicate)`
+Finds the first element that matches the predicate.
+
+```typescript
+const users = [
+  { id: 1, name: "Alice", role: "user" },
+  { id: 2, name: "Bob", role: "admin" },
+  { id: 3, name: "Charlie", role: "user" }
+];
+
+const admin = pipeSync(users)
+  .next(E.find, (user) => user.role === "admin")
+  .result();
+
+console.log(admin); // { id: 2, name: "Bob", role: "admin" }
+```
+
+### Array Manipulation Functions
+
+#### `E.sort(compareFn?)`
+Sorts array elements using an optional compare function.
+
+```typescript
+const numbers = [3, 1, 4, 1, 5, 9, 2, 6];
+
+// Ascending order (default)
+const ascending = pipeSync(numbers)
+  .next(E.sort)
+  .result();
+
+console.log(ascending); // [1, 1, 2, 3, 4, 5, 6, 9]
+
+// Custom sorting
+const users = [
+  { name: "Alice", age: 30 },
+  { name: "Bob", age: 25 },
+  { name: "Charlie", age: 35 }
+];
+
+const sortedByAge = pipeSync(users)
+  .next(E.sort, (a, b) => a.age - b.age)
+  .result();
+
+console.log(sortedByAge); // Sorted by age ascending
+```
+
+#### `E.reverse()`
+Reverses the order of elements in an array.
+
+```typescript
+const numbers = [1, 2, 3, 4, 5];
+
+const reversed = pipeSync(numbers)
+  .next(E.reverse)
+  .result();
+
+console.log(reversed); // [5, 4, 3, 2, 1]
+```
+
+#### `E.slice(start, end?)`
+Extracts a section of an array and returns a new array.
+
+```typescript
+const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+const middle = pipeSync(numbers)
+  .next(E.slice, 2, 7)
+  .result();
+
+console.log(middle); // [3, 4, 5, 6, 7]
+
+// First 3 elements
+const first3 = pipeSync(numbers)
+  .next(E.slice, 0, 3)
+  .result();
+
+console.log(first3); // [1, 2, 3]
+```
+
+### Array Combining Functions
+
+#### `E.concat(...arrays)`
+Combines multiple arrays into one.
+
+```typescript
+const arr1 = [1, 2, 3];
+const arr2 = [4, 5, 6];
+const arr3 = [7, 8, 9];
+
+const combined = pipeSync(arr1)
+  .next(E.concat, arr2, arr3)
+  .result();
+
+console.log(combined); // [1, 2, 3, 4, 5, 6, 7, 8, 9]
+```
+
+#### `E.flat(depth?)`
+Flattens nested arrays to the specified depth (default: 1).
+
+```typescript
+const nested = [1, [2, 3], [4, [5, 6]]];
+
+const flattened = pipeSync(nested)
+  .next(E.flat)
+  .result();
+
+console.log(flattened); // [1, 2, 3, 4, [5, 6]]
+
+// Flatten all levels
+const deepFlattened = pipeSync(nested)
+  .next(E.flat, Infinity)
+  .result();
+
+console.log(deepFlattened); // [1, 2, 3, 4, 5, 6]
+```
+
+#### `E.join(separator?)`
+Joins array elements into a string with an optional separator.
+
+```typescript
+const words = ["Hello", "world", "from", "Cano", "TS"];
+
+const sentence = pipeSync(words)
+  .next(E.join, " ")
+  .result();
+
+console.log(sentence); // "Hello world from Cano TS"
+
+// CSV format
+const data = ["Alice", "25", "Developer"];
+
+const csv = pipeSync(data)
+  .next(E.join, ",")
+  .result();
+
+console.log(csv); // "Alice,25,Developer"
+```
+
+### Boolean Operation Functions
+
+#### `E.every(predicate)`
+Tests whether all elements pass the provided predicate.
+
+```typescript
+const numbers = [2, 4, 6, 8, 10];
+
+const allEven = pipeSync(numbers)
+  .next(E.every, (x: number) => x % 2 === 0)
+  .result();
+
+console.log(allEven); // true
+
+const users = [
+  { name: "Alice", age: 25 },
+  { name: "Bob", age: 30 },
+  { name: "Charlie", age: 17 }
+];
+
+const allAdults = pipeSync(users)
+  .next(E.every, (user) => user.age >= 18)
+  .result();
+
+console.log(allAdults); // false
+```
+
+#### `E.some(predicate)`
+Tests whether at least one element passes the provided predicate.
+
+```typescript
+const numbers = [1, 3, 5, 8, 9];
+
+const hasEven = pipeSync(numbers)
+  .next(E.some, (x: number) => x % 2 === 0)
+  .result();
+
+console.log(hasEven); // true
+
+const users = [
+  { name: "Alice", role: "user" },
+  { name: "Bob", role: "admin" },
+  { name: "Charlie", role: "user" }
+];
+
+const hasAdmin = pipeSync(users)
+  .next(E.some, (user) => user.role === "admin")
+  .result();
+
+console.log(hasAdmin); // true
+```
+
+#### `E.includes(searchElement)`
+Determines whether an array includes a certain value.
+
+```typescript
+const fruits = ["apple", "banana", "orange"];
+
+const hasBanana = pipeSync(fruits)
+  .next(E.includes, "banana")
+  .result();
+
+console.log(hasBanana); // true
+
+const numbers = [1, 2, 3, 4, 5];
+
+const hasEight = pipeSync(numbers)
+  .next(E.includes, 8)
+  .result();
+
+console.log(hasEight); // false
+```
+
+## 🌟 Advanced E Module Examples
+
+### Data Processing Pipeline
+```typescript
+import { pipeSync, E } from "cano-ts";
+
+const orders = [
+  { id: 1, customer: "Alice", amount: 150, status: "completed", date: "2024-01-15" },
+  { id: 2, customer: "Bob", amount: 75, status: "pending", date: "2024-01-16" },
+  { id: 3, customer: "Charlie", amount: 200, status: "completed", date: "2024-01-17" },
+  { id: 4, customer: "Diana", amount: 90, status: "completed", date: "2024-01-18" },
+  { id: 5, customer: "Eve", amount: 300, status: "cancelled", date: "2024-01-19" }
+];
+
+// Get total revenue from completed orders over $100
+const highValueRevenue = pipeSync(orders)
+  .next(E.filter, (order) => order.status === "completed")
+  .next(E.filter, (order) => order.amount > 100)
+  .next(E.map, (order) => order.amount)
+  .next(E.reduce, (sum: number, amount: number) => sum + amount, 0)
+  .result();
+
+console.log(highValueRevenue); // 350
+
+// Get customer names with pending orders
+const pendingCustomers = pipeSync(orders)
+  .next(E.filter, (order) => order.status === "pending")
+  .next(E.map, (order) => order.customer)
+  .next(E.join, ", ")
+  .result();
+
+console.log(pendingCustomers); // "Bob"
+```
+
+### Complex Data Transformation
+```typescript
+const salesData = [
+  { region: "North", products: [{ name: "Laptop", sales: [100, 150, 200] }] },
+  { region: "South", products: [{ name: "Phone", sales: [80, 90, 120] }] },
+  { region: "East", products: [{ name: "Tablet", sales: [60, 70, 80] }] }
+];
+
+// Calculate total sales across all regions and products
+const totalSales = pipeSync(salesData)
+  .next(E.map, (region) => region.products)
+  .next(E.flat)
+  .next(E.map, (product) => product.sales)
+  .next(E.flat)
+  .next(E.reduce, (sum: number, sale: number) => sum + sale, 0)
+  .result();
+
+console.log(totalSales); // 950
+```
+
+### Text Processing Pipeline
+```typescript
+const text = "The Quick Brown Fox Jumps Over The Lazy Dog";
+
+const processedText = pipeSync(text)
+  .next((str) => str.toLowerCase())
+  .next((str) => str.split(" "))
+  .next(E.filter, (word) => word.length > 3)
+  .next(E.sort)
+  .next(E.map, (word) => word.charAt(0).toUpperCase() + word.slice(1))
+  .next(E.join, " → ")
+  .result();
+
+console.log(processedText); // "Brown → Jumps → Lazy → Over → Quick"
+```

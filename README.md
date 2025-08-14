@@ -49,6 +49,19 @@ const result = pipeSync(5)
 console.log(result); // "Result: 16"
 ```
 
+## 📦 Installation
+**npm**
+```sh
+npm install cano-ts
+```
+
+You can also use other package manager:
+```sh
+pnpm add cano-ts
+# OR
+yarn add cano-ts
+```
+
 ## 📖 About cano-ts
 
 When working with transformations in **JavaScript** and **TypeScript**, we often end up with deeply nested function calls or complex `.then()` chains for asynchronous operations. **Cano Ts** solves this problem by introducing a *fluent, pipeline-based API for function chaining*.
@@ -89,20 +102,32 @@ console.log(result);
 
 - ✅ **Fluent API** – Chain functions using `.next()`
 - ✅ **Supports async & sync pipelines** – `pipe()` for `async`, `pipeSync()` for sync
-- ✅ **Error Handling – Configurable PipeError** for better debugging
 - ✅ **Function History Tracking** – Debug easily with `.log()`
+- ✅ **Array Utilities** – Built-in `E` module with functional array operations
 - ✅ **Fully Type-Safe** – Leverages TypeScript generics for strong typings
 
-## 📦 Installation
-**npm**
-```sh
-npm install cano-ts
-```
+## 🔧 Array Utilities with E Module
 
-You can also use other package manager:
-```sh
-pnpm add cano-ts
-# OR
-yarn add cano-ts
+Cano TS includes a powerful `E` module for functional array operations that work seamlessly with pipes:
+
+```typescript
+import { pipeSync, E } from "cano-ts";
+
+const users = [
+  { id: 1, name: "Alice", age: 25, active: true },
+  { id: 2, name: "Bob", age: 30, active: false },
+  { id: 3, name: "Charlie", age: 35, active: true },
+  { id: 4, name: "Diana", age: 28, active: true },
+];
+
+const result = pipeSync(users)
+  .next(E.filter, (user) => user.active) // Filter active users
+  .next(E.sort, (a, b) => b.age - a.age) // Sort by age descending
+  .next(E.map, (user) => user.name) // Extract names
+  .next(E.slice, 0, 2) // Take first 2
+  .next(E.join, " & ") // Join with separator
+  .result();
+
+console.log(result); // "Charlie & Diana"
 ```
 <p align="center"> Made with 💜 by <a href="https://github.com/HenriqueArtur" target="_blank">Henrique Artur</a></p>
