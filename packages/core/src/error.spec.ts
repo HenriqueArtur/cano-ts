@@ -1,4 +1,4 @@
-import { PipeError, formatEnhancedErrorMsg } from "error";
+import { formatEnhancedErrorMsg, PipeError } from "error";
 import { describe, expect, it } from "vitest";
 
 class CustomErr extends Error {

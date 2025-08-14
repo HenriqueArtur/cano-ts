@@ -1,4 +1,5 @@
 import { PipeError } from "error";
+
 export { default as E } from "./enum";
 
 interface PipeConfigArg {
