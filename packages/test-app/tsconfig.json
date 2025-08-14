@@ -1,15 +1,17 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "./dist",
-    "rootDir": ".",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "disableSizeLimit": true,
+    "isolatedModules": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "target": "es2022",
+    "types": ["vitest/globals", "node"],
     "noEmit": true,
-    "skipLibCheck": true,
-    "types": ["vitest/globals", "node"]
+    "skipLibCheck": true
   },
   "include": ["./test/**/*.ts", "./vitest.config.ts"],
-  "exclude": ["node_modules", "dist", "libs"],
-  "references": [
-    { "path": "../core" }
-  ]
+  "exclude": ["node_modules", "dist", "libs"]
 }
