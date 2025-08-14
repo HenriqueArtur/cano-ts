@@ -31,7 +31,7 @@ Each pipeline starts with an initial value, processes it through a sequence of f
 The `.next()` method applies a function to the current value in the pipeline and returns a *new pipeline* with the transformed value.
 - Works with both synchronous (`pipeSync`) and asynchronous (`pipe`) pipelines.
 - Accepts extra arguments (`...args`) which are passed to `fn`.
-- Preserves function history for debugging and error handling.
+- Preserves function history for debugging.
 
 **Example:** *Sync Pipeline with Extra Arguments*
 ```typescript

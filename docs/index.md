@@ -40,7 +40,6 @@ console.log(finalPrice); // "$ 108.00"
 
 - ✅ **Fluent API** – Chain functions using `.next()`
 - ✅ **Supports async & sync pipelines** – `pipe()` for `async`, `pipeSync()` for sync
-- ✅ **Error Handling – Configurable PipeError** for better debugging
 - ✅ **Function History Tracking** – Debug easily with `.log()`
 - ✅ **Fully Type-Safe** – Leverages TypeScript generics for strong typings
 

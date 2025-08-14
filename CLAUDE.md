@@ -35,12 +35,10 @@ This is a pnpm workspace with the main library code in `packages/core/` and a te
 
 ### Core Library (`packages/core/`)
 - **Main exports**: `pipe()` (async) and `pipeSync()` (sync) functions
-- **Error handling**: Custom `PipeError` class with enhanced error messages and execution history
 - **Utility module**: `E` enum exports array utility functions (map, filter, reduce, etc.)
 
 ### Key Files
 - `packages/core/src/index.ts` - Main pipe implementations (Pipe and PipeSync classes)
-- `packages/core/src/error.ts` - PipeError class and error formatting
 - `packages/core/src/enum.ts` - Array utility functions exported as `E`
 
 ### Build System

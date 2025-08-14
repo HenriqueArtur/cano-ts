@@ -1,4 +1,3 @@
-import { PipeError } from "error";
 import { describe, expect, it, vi } from "vitest";
 import { pipe, pipeSync } from ".";
 
@@ -15,11 +14,6 @@ const multiplyAsync = async (x: number, factor: number) => x * factor;
 const formatAsync = async (x: number, prefix: string) => `${prefix} ${x}`;
 const concatThreeAsync = async (a: string, b: string, c: string) => `${a} ${b} ${c}`;
 const complexMathAsync = async (a: number, b: number, c: number, d: number) => (a + b) * (c - d);
-
-// Sample Error
-class CustomErr extends Error {
-  key = "value";
-}
 
 describe("pipeSync", () => {
   describe(".next()", () => {
@@ -155,51 +149,6 @@ describe("pipeSync", () => {
       expect(result).toBe(20);
 
       consoleSpy.mockRestore();
-    });
-  });
-
-  describe("Error Handling", () => {
-    it("should throw an error when a sync function fails", () => {
-      const failingFn = (_x: number) => {
-        throw new CustomErr("Sync failure");
-      };
-
-      expect(() => pipeSync(5).next(failingFn).result()).toThrow();
-    });
-
-    it("should throw a PipeError when a sync function fails and usePipeError is enabled", () => {
-      const failingFn = (_x: number) => {
-        throw new CustomErr("Sync failure");
-      };
-
-      expect(() => pipeSync(5, { usePipeError: true }).next(failingFn).result()).toThrow(PipeError);
-    });
-
-    it("should throw a PipeError when a sync function fails and usePipeError is disabled", () => {
-      const failingFn = (_x: number) => {
-        throw new CustomErr("Sync failure");
-      };
-
-      expect(() => pipeSync(5, { usePipeError: false }).next(failingFn).result()).toThrow(
-        CustomErr,
-      );
-    });
-
-    it("should include function history in PipeError for sync functions", () => {
-      const failingFn = (_x: number) => {
-        throw new CustomErr("Sync failure");
-      };
-
-      try {
-        pipeSync(10, { usePipeError: true })
-          .next((x) => x + 2)
-          .next(failingFn)
-          .result();
-      } catch (err) {
-        expect(err).toBeInstanceOf(PipeError);
-        expect(err.stack).toContain("  1. anonymous");
-        expect(err.stack).toContain('  2. ❌ ERROR in "failingFn"');
-      }
     });
   });
 });
@@ -348,56 +297,6 @@ describe("pipe (Async)", () => {
       expect(result).toBe(20);
 
       consoleSpy.mockRestore();
-    });
-  });
-
-  describe("Error Handling", () => {
-    it("should handle async errors", async () => {
-      const failingAsyncFn = async (_x: number) => {
-        throw new CustomErr("Test Error");
-      };
-
-      await expect(pipe(5).next(failingAsyncFn).result()).rejects.toThrow();
-    });
-
-    it("should throw a PipeError when an async function fails and usePipeError is enabled", async () => {
-      const failingAsyncFn = async (_x: number) => {
-        throw new CustomErr("Async failure");
-      };
-
-      try {
-        await pipe(5, { usePipeError: true }).next(failingAsyncFn).result();
-      } catch (err) {
-        expect(err).toBeInstanceOf(PipeError);
-        expect(err.stack).toContain('❌ ERROR in "failingAsyncFn"');
-      }
-    });
-
-    it("should throw a PipeError when a sync function fails and usePipeError is disabled", () => {
-      const failingAsyncFn = async (_x: number) => {
-        throw new CustomErr("Async failure");
-      };
-
-      expect(() => pipe(5, { usePipeError: false }).next(failingAsyncFn).result()).rejects.toThrow(
-        CustomErr,
-      );
-    });
-
-    it("should include function history in PipeError for async functions", async () => {
-      const failingAsyncFn = async (_x: number) => {
-        throw new CustomErr("Async failure");
-      };
-
-      try {
-        await pipe(10, { usePipeError: true })
-          .next(async (x) => x + 2)
-          .next(failingAsyncFn)
-          .result();
-      } catch (err) {
-        expect(err).toBeInstanceOf(PipeError);
-        expect(err.stack).toContain("  1. anonymous");
-        expect(err.stack).toContain('  2. ❌ ERROR in "failingAsyncFn"');
-      }
     });
   });
 });
