@@ -39,7 +39,7 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: 📥 Install dependencies
-        run: pnpm install --filter=@cano-ts/core
+        run: pnpm i
 
       - name: ✅ Run tests build
         run: pnpm run test:build
