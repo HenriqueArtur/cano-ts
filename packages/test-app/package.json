@@ -6,7 +6,7 @@
   },
   "scripts": {
     "test": "vitest run",
-    "test:type": "pnpm exec tsc --noEmit"
+    "test:type": "npx tsc --noEmit"
   },
   "devDependencies": {
     "@types/node": "22.13.9",

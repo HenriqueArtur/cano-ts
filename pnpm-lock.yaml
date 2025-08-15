@@ -99,25 +99,6 @@ importers:
         specifier: 'catalog:'
         version: 3.0.7(@types/node@22.13.9)(tsx@4.19.3)
 
-  packages/test-app:
-    dependencies:
-      cano-ts:
-        specifier: file:./libs/cano-ts
-        version: file:packages/test-app/libs/cano-ts
-    devDependencies:
-      '@types/node':
-        specifier: 22.13.9
-        version: 22.13.9
-      typescript:
-        specifier: 5.8.2
-        version: 5.8.2
-      vite-tsconfig-paths:
-        specifier: ^5.1.4
-        version: 5.1.4(typescript@5.8.2)(vite@6.2.0(@types/node@22.13.9)(tsx@4.19.3))
-      vitest:
-        specifier: ^3.0.7
-        version: 3.0.7(@types/node@22.13.9)(tsx@4.19.3)
-
 packages:
 
   '@algolia/autocomplete-core@1.17.7':
@@ -998,9 +979,6 @@ packages:
   cac@6.7.14:
     resolution: {integrity: sha512-b6Ilus+c3RrdDk+JhLKUAQfzzgLEPy6wcXqS7f/xe1EETvsDP6GORG7SFuOs6cID5YkqchW/LXZbX5bc8j7ZcQ==}
     engines: {node: '>=8'}
-
-  cano-ts@file:packages/test-app/libs/cano-ts:
-    resolution: {directory: packages/test-app/libs/cano-ts, type: directory}
 
   ccount@2.0.1:
     resolution: {integrity: sha512-eyrF0jiFpY+3drT6383f1qhkbGsLSifNAjA61IUjZjmLCWjItY6LB9ft9YhoDgwfmclB2zhu51Lc7+95b8NRAg==}
@@ -2590,8 +2568,6 @@ snapshots:
       fill-range: 7.1.1
 
   cac@6.7.14: {}
-
-  cano-ts@file:packages/test-app/libs/cano-ts: {}
 
   ccount@2.0.1: {}
 
