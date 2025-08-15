@@ -1,6 +1,6 @@
-import E from "enum";
-import { pipe, pipeSync } from "index";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import E from "./enum";
+import { pipe, pipeSync } from "./index";
 
 describe("um Utility Functions", () => {
   let numbers: number[];
