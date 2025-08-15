@@ -5,9 +5,12 @@
     "cano-ts": "file:./libs/cano-ts"
   },
   "scripts": {
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:type": "npx tsc --noEmit"
   },
   "devDependencies": {
+    "@types/node": "22.13.9",
+    "typescript": "5.8.2",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.0.7"
   }

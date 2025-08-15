@@ -1,18 +1,4 @@
-import { PipeError } from "error";
 export { default as E } from "./enum";
-
-interface PipeConfigArg {
-  usePipeError?: boolean;
-}
-
-type PipeConfig = Required<PipeConfigArg>;
-
-function setConfig(config?: PipeConfigArg): PipeConfig {
-  if (!config) return { usePipeError: true };
-  return {
-    usePipeError: config.usePipeError ?? true,
-  };
-}
 
 /**
  * Creates an asynchronous pipeline that allows chaining async functions.
@@ -22,7 +8,6 @@ function setConfig(config?: PipeConfigArg): PipeConfig {
  * retrieve the final computed value.
  *
  * @param value - The initial value to be processed in the pipeline.
- * @param config - Optional configuration for error handling.
  * @returns A Pipe instance that allows chaining async operations.
  *
  * @example
@@ -41,8 +26,8 @@ function setConfig(config?: PipeConfigArg): PipeConfig {
  *
  * console.log(result); // 11
  */
-export function pipe<T>(value: T, config?: PipeConfigArg) {
-  return new Pipe(value, setConfig(config));
+export function pipe<T>(value: T) {
+  return new Pipe(value);
 }
 
 type AsyncPipeFn<T, U, Args extends unknown[]> = (arg: T, ...args: Args) => U | Promise<U>;
@@ -50,11 +35,9 @@ type AsyncPipeFn<T, U, Args extends unknown[]> = (arg: T, ...args: Args) => U | 
 class Pipe<T> {
   private value: Promise<T>;
   private fnHistory: string[];
-  private config: PipeConfig;
 
-  constructor(initialValue: T | Promise<T>, config: PipeConfig, fnHistory: string[] = []) {
+  constructor(initialValue: T | Promise<T>, fnHistory: string[] = []) {
     this.value = Promise.resolve(initialValue);
-    this.config = config;
     this.fnHistory = fnHistory;
   }
 
@@ -63,16 +46,10 @@ class Pipe<T> {
     const newHistory = [...this.fnHistory, fnName];
 
     return new Pipe(
-      this.value
-        .then((value) => {
-          const result = fn(value, ...args);
-          return Promise.resolve(result);
-        })
-        .catch((err) => {
-          if (this.config.usePipeError) throw new PipeError(err, newHistory);
-          throw err;
-        }),
-      this.config,
+      this.value.then((value) => {
+        const result = fn(value, ...args);
+        return Promise.resolve(result);
+      }),
       newHistory,
     );
   }
@@ -89,7 +66,6 @@ class Pipe<T> {
         else console.debug(`[PipeAsync] ${this.fnHistory[this.fnHistory.length - 1]} ->`, val);
         return val;
       }),
-      this.config,
       this.fnHistory,
     );
   }
@@ -107,7 +83,6 @@ class Pipe<T> {
  * retrieve the final computed value.
  *
  * @param value - The initial value to be processed in the pipeline.
- * @param config - Optional configuration for error handling.
  * @returns A PipeSync instance that allows chaining synchronous operations.
  *
  * @example
@@ -126,8 +101,8 @@ class Pipe<T> {
  *
  * console.log(result); // 11
  */
-export function pipeSync<T>(value: T, config?: PipeConfigArg) {
-  return new PipeSync(value, setConfig(config));
+export function pipeSync<T>(value: T) {
+  return new PipeSync(value);
 }
 
 type SyncPipeFn<T, U, Args extends unknown[]> = (arg: T, ...args: Args) => U;
@@ -135,22 +110,15 @@ type SyncPipeFn<T, U, Args extends unknown[]> = (arg: T, ...args: Args) => U;
 class PipeSync<T> {
   private value: T;
   private fnHistory: string[];
-  private config: PipeConfig;
 
-  constructor(initialValue: T, config: PipeConfig, fnHistory: string[] = []) {
+  constructor(initialValue: T, fnHistory: string[] = []) {
     this.value = initialValue;
-    this.config = config;
     this.fnHistory = fnHistory;
   }
 
   next<U, Args extends unknown[]>(fn: SyncPipeFn<T, U, Args>, ...args: Args): PipeSync<U> {
     const newHistory = [...this.fnHistory, fn.name || "anonymous"];
-    try {
-      return new PipeSync(fn(this.value, ...args) as U, this.config, newHistory);
-    } catch (err) {
-      if (this.config.usePipeError) throw new PipeError(err, newHistory);
-      throw err;
-    }
+    return new PipeSync(fn(this.value, ...args) as U, newHistory);
   }
 
   log(msg?: string) {
