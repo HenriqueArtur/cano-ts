@@ -32,7 +32,8 @@
     "clean": "rm -rf ../../dist test/dist",
     "test": "vitest",
     "test:build": "vitest run test/** -c ./vitest.config.build.ts",
-    "test:ci": "vitest run"
+    "test:ci": "vitest run",
+    "test:type": "pnpm exec tsc --noEmit"
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",

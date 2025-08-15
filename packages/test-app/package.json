@@ -5,7 +5,8 @@
     "cano-ts": "file:./libs/cano-ts"
   },
   "scripts": {
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:type": "pnpm exec tsc --noEmit"
   },
   "devDependencies": {
     "@types/node": "22.13.9",

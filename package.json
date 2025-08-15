@@ -45,7 +45,7 @@
     "test:ci": "pnpm run --filter=@cano-ts/core test:ci",
     "test:integration": "pnpm run prepare:test-app && pnpm run test:test-app",
     "test:test-app": "tsx ./scripts/run-tests-in-test-app.ts",
-    "test:type": "tsc --build",
+    "test:type": "pnpm run --filter='./packages/*' test:type",
     "update:version": "tsx ./scripts/update-global-version.ts",
     "version": "pnpm changeset version && pnpm run update:version",
     "version:description": "pnpm changeset",
