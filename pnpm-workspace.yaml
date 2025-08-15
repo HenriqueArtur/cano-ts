@@ -1,6 +1,6 @@
 packages:
   - "packages/*"
-  - "packages/test-app"
+  - "!packages/test-app"
 
 catalog:
   "@biomejs/biome": "^2.1.4"
