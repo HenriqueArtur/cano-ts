@@ -1,0 +1,10 @@
+{
+  "$schema": "https://raw.githubusercontent.com/raineorshine/npm-check-updates/main/schema.json",
+  "upgrade": true,
+  "interactive": true,
+  "reject": [],
+  "target": "latest",
+  "workspaces": true,
+  "format": ["group", "ownerChanged"],
+  "install": "never"
+}

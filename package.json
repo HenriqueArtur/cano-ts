@@ -16,7 +16,7 @@
     "type": "git",
     "url": "https://github.com/HenriqueArtur/cano-ts"
   },
-  "packageManager": "pnpm@10.5.2",
+  "packageManager": "pnpm@10.29.3",
   "type": "module",
   "main": "index.mjs",
   "module": "index.mjs",
@@ -46,6 +46,8 @@
     "test:integration": "pnpm run prepare:test-app && pnpm run test:test-app",
     "test:test-app": "tsx ./scripts/run-tests-in-test-app.ts",
     "test:type": "pnpm run --filter=@cano-ts/core test:type && cd packages/test-app && npm install && npm run test:type",
+    "update:deps": "ncu -u && ncu -u packages/test-app/package.json",
+    "update:deps:check": "ncu && ncu packages/test-app/package.json",
     "update:version": "tsx ./scripts/update-global-version.ts",
     "version": "pnpm changeset version && pnpm run update:version",
     "version:description": "pnpm changeset",
@@ -58,8 +60,9 @@
     "@changesets/cli": "catalog:",
     "@types/node": "catalog:",
     "husky": "catalog:",
+    "npm-check-updates": "19.3.2",
     "tsx": "catalog:",
     "typescript": "catalog:",
-    "vitepress": "^1.6.3"
+    "vitepress": "1.6.4"
   }
 }
