@@ -1,9 +1,15 @@
 {
   "name": "@cano-ts/core",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "",
   "license": "MIT",
-  "keywords": ["pipe", "operator", "elixir", "functional", "typescript"],
+  "keywords": [
+    "pipe",
+    "operator",
+    "elixir",
+    "functional",
+    "typescript"
+  ],
   "author": "Henrique Artur <contato@henriqueartur.com>",
   "repository": {
     "type": "git",
