@@ -1,17 +1,20 @@
-packages:
-  - "packages/*"
-  - "!packages/test-app"
-
-catalog:
-  "@biomejs/biome": "^2.1.4"
-  "@changesets/cli": "^2.28.1"
-  "@rollup/plugin-typescript": "^12.1.2"
-  "@types/node": "^22.13.9"
-  "husky": "^9.1.7"
-  "rollup": "^4.34.9"
-  "rollup-plugin-dts": "^6.1.1"
-  "tslib": "^2.8.1"
-  "typescript": "^5.8.2"
-  "vite-tsconfig-paths": "^5.1.4"
-  "vitest": "^3.0.7"
-  "tsx": "4.19.3"
+{
+  "packages": [
+    "packages/*",
+    "!packages/test-app"
+  ],
+  "catalog": {
+    "@biomejs/biome": "2.4.1",
+    "@changesets/cli": "2.29.8",
+    "@rollup/plugin-typescript": "12.3.0",
+    "@types/node": "25.2.3",
+    "husky": "9.1.7",
+    "rollup": "4.57.1",
+    "rollup-plugin-dts": "6.3.0",
+    "tslib": "2.8.1",
+    "typescript": "5.9.3",
+    "vite-tsconfig-paths": "6.1.1",
+    "vitest": "4.0.18",
+    "tsx": "4.21.0"
+  }
+}

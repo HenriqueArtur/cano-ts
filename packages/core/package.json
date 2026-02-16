@@ -10,7 +10,7 @@
     "url": "https://github.com/HenriqueArtur/cano-ts"
   },
   "homepage": "https://henriqueartur.github.io/cano-ts/",
-  "packageManager": "pnpm@10.5.2",
+  "packageManager": "pnpm@10.29.3",
   "main": "cjs/index.cjs",
   "module": "esm/index.mjs",
   "types": "types/index.d.ts",
