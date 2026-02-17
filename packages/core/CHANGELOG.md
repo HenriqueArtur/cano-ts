@@ -1,5 +1,11 @@
 # @cano-ts/core
 
+## 1.4.0
+
+### Minor Changes
+
+- adding `.catch/1`
+
 ## 1.2.0
 
 ### Minor Changes

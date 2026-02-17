@@ -199,6 +199,78 @@ const validateAndProcess = pipeSync([
   .result();
 ```
 
+## 🚨 Error Handling with `.catch()`
+
+Cano TS provides built-in error handling through the `.catch()` method, allowing you to gracefully recover from errors anywhere in your pipeline.
+
+### Basic Error Handling
+```typescript
+import { pipeSync } from "cano-ts";
+
+function divide(x: number, y: number) {
+  if (y === 0) throw new Error("Division by zero");
+  return x / y;
+}
+
+const result = pipeSync(10)
+  .next((x) => x * 2)        // 10 * 2 = 20
+  .next(divide, 0)           // ❌ Throws error
+  .catch((error) => {
+    console.error("Error:", error.message);
+    return 0;                // Recovery value
+  })
+  .next((x) => x + 5)        // 0 + 5 = 5 (continues normally)
+  .result();
+
+console.log(result); // 5
+```
+
+### Async Error Handling
+```typescript
+import { pipe } from "cano-ts";
+
+async function fetchUser(id: number) {
+  const response = await fetch(`/api/users/${id}`);
+  if (!response.ok) throw new Error("User not found");
+  return response.json();
+}
+
+const user = await pipe(999)
+  .next(fetchUser)           // ❌ Throws "User not found"
+  .catch((error) => {
+    console.log("Using guest user:", error.message);
+    return { id: 0, name: "Guest", email: "guest@example.com" };
+  })
+  .next((user) => user.name.toUpperCase())
+  .result();
+
+console.log(user); // "GUEST"
+```
+
+### Key Features
+- ✅ **Catches errors from any previous step** in the pipeline
+- ✅ **Skips subsequent `.next()` calls** until error is handled
+- ✅ **Allows recovery** by returning a fallback value
+- ✅ **Pipeline continues normally** after `.catch()`
+
+### Multiple Catch Handlers
+```typescript
+const result = pipeSync(data)
+  .next(riskyOperation1)
+  .catch((error) => {
+    if (error.message === "Network error") {
+      return cachedData; // Recover from network issues
+    }
+    throw error; // Re-throw other errors
+  })
+  .next(riskyOperation2)
+  .catch((error) => {
+    console.error("Final fallback:", error.message);
+    return defaultValue;
+  })
+  .result();
+```
+
 ## 💡 Best Practices
 
 ### 1. Use Descriptive Function Names

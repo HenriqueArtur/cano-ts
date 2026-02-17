@@ -15,6 +15,7 @@ Each pipeline starts with an initial value, processes it through a sequence of f
 **Methods:**
 - `.next(fn, ...args)` → Chains functions in the pipeline.
 - `.log(message?)` → Logs intermediate values for debugging.
+- `.catch(handler)` → Catches and handles errors in the pipeline.
 - `.result()` → Resolves and returns the final computed value.
 
 ### 🔹 .next(fn, ...args)
@@ -121,6 +122,138 @@ await pipe(5)
 ```
 [PipeAsync] anonymous -> 10
 After increment: 11```
+```
+
+### 🔹 `.catch(handler)`
+
+**Definition**
+```typescript
+// Synchronous
+.catch<U>(handler: (error: unknown) => U): PipeSync<T | U>
+
+// Asynchronous
+.catch<U>(handler: (error: unknown) => U | Promise<U>): Pipe<T | U>
+```
+
+The `.catch()` method handles errors that occur anywhere in the pipeline, allowing you to recover gracefully by returning a fallback value.
+
+- Catches errors from **any previous `.next()` call** in the pipeline.
+- Once an error occurs, subsequent `.next()` calls are **skipped** until `.catch()` handles it.
+- After catching and recovering, the pipeline can **continue normally**.
+- Works in both sync (`pipeSync`) and async (`pipe`) pipelines.
+- If not caught, errors are thrown when `.result()` is called.
+
+**Example:** *Basic Error Handling*
+```typescript
+import { pipeSync } from "cano-ts";
+
+function divide(x: number, y: number) {
+  if (y === 0) throw new Error("Division by zero");
+  return x / y;
+}
+
+const result = pipeSync(10)
+  .next((x) => x * 2) // 10 * 2 = 20
+  .next(divide, 0) // ❌ Throws error
+  .catch((error) => {
+    console.error("Error caught:", error.message);
+    return 0; // Recovery value
+  })
+  .next((x) => x + 5) // 0 + 5 = 5
+  .result();
+
+console.log(result); // 5
+```
+
+**Example:** *Catching Errors from Any Step*
+```typescript
+const result = pipeSync(10)
+  .next((x) => x * 2) // ✅ Executes: 10 * 2 = 20
+  .next((x) => {
+    throw new Error("Error in step 2");
+  }) // ❌ Throws error
+  .next((x) => x + 5) // ⏭️ Skipped (error state)
+  .next((x) => x * 3) // ⏭️ Skipped (error state)
+  .catch((error) => {
+    console.log("Caught:", error.message);
+    return 0; // Recover with 0
+  })
+  .result();
+
+console.log(result); // 0
+```
+
+**Example:** *Async Error Handling with API Calls*
+```typescript
+import { pipe } from "cano-ts";
+
+async function fetchUser(id: number) {
+  const response = await fetch(`https://api.example.com/users/${id}`);
+  if (!response.ok) throw new Error(`User ${id} not found`);
+  return response.json();
+}
+
+async function getEmail(user: { email: string }) {
+  return user.email;
+}
+
+const result = await pipe(999)
+  .next(fetchUser) // ❌ Throws "User 999 not found"
+  .next(getEmail) // ⏭️ Skipped
+  .catch((error) => {
+    console.error("API Error:", error.message);
+    return { email: "default@example.com" }; // Fallback user
+  })
+  .next(getEmail) // ✅ Continues with fallback
+  .result();
+
+console.log(result); // "default@example.com"
+```
+
+**Example:** *Multiple Catch Handlers*
+```typescript
+const result = pipeSync(10)
+  .next(() => {
+    throw new Error("First error");
+  })
+  .catch(() => {
+    console.log("First catch - rethrowing");
+    throw new Error("Second error");
+  })
+  .catch((error) => {
+    console.log("Second catch:", error.message);
+    return 42; // Final recovery
+  })
+  .result();
+
+console.log(result); // 42
+```
+
+**Example:** *Conditional Error Recovery*
+```typescript
+function processData(data: string) {
+  if (!data) throw new Error("Empty data");
+  if (data.length < 5) throw new Error("Data too short");
+  return data.toUpperCase();
+}
+
+const result = pipeSync("")
+  .next(processData) // ❌ Throws "Empty data"
+  .catch((error) => {
+    const message = (error as Error).message;
+
+    if (message === "Empty data") {
+      return "DEFAULT"; // Use default value
+    }
+    if (message === "Data too short") {
+      return "SHORT"; // Different fallback
+    }
+
+    throw error; // Re-throw unknown errors
+  })
+  .result();
+
+console.log(result); // "DEFAULT"
 ```
 
 ### 🔹 `.result()`

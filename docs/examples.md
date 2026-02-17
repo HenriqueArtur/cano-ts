@@ -1,6 +1,306 @@
-# 🔧 E Module Examples
+# 🔧 Examples
 
-This page showcases comprehensive examples of the E module's array utilities in real-world scenarios. The E module provides functional programming utilities that integrate seamlessly with Cano TS pipelines.
+This page showcases comprehensive examples of Cano TS in real-world scenarios, including error handling and the E module's array utilities.
+
+## 🚨 Error Handling Examples
+
+### API Error Recovery
+```typescript
+import { pipe } from "cano-ts";
+
+async function fetchUserProfile(userId: number) {
+  const response = await fetch(`https://api.example.com/users/${userId}`);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch user ${userId}: ${response.statusText}`);
+  }
+  return response.json();
+}
+
+async function fetchUserPosts(userId: number) {
+  const response = await fetch(`https://api.example.com/users/${userId}/posts`);
+  if (!response.ok) throw new Error("Failed to fetch posts");
+  return response.json();
+}
+
+async function enrichProfile(profile: any, posts: any[]) {
+  return {
+    ...profile,
+    postCount: posts.length,
+    lastPost: posts[0]?.title || "No posts"
+  };
+}
+
+// Gracefully handle API failures
+const userProfile = await pipe(999) // Non-existent user
+  .next(fetchUserProfile)
+  .catch((error) => {
+    console.error("API Error:", error.message);
+    // Return a default guest profile
+    return {
+      id: 0,
+      name: "Guest User",
+      email: "guest@example.com"
+    };
+  })
+  .next(async (profile) => {
+    if (profile.id === 0) return []; // Skip fetching posts for guest
+    return fetchUserPosts(profile.id);
+  })
+  .catch(() => []) // Handle posts fetch failure
+  .next((posts) => enrichProfile(
+    { id: 0, name: "Guest User", email: "guest@example.com" },
+    posts
+  ))
+  .result();
+
+console.log(userProfile);
+// { id: 0, name: "Guest User", email: "guest@example.com", postCount: 0, lastPost: "No posts" }
+```
+
+### Data Validation Pipeline
+```typescript
+import { pipeSync } from "cano-ts";
+
+interface UserInput {
+  email: string;
+  age: number;
+  password: string;
+}
+
+function validateEmail(input: UserInput) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(input.email)) {
+    throw new Error("Invalid email format");
+  }
+  return input;
+}
+
+function validateAge(input: UserInput) {
+  if (input.age < 18 || input.age > 120) {
+    throw new Error("Age must be between 18 and 120");
+  }
+  return input;
+}
+
+function validatePassword(input: UserInput) {
+  if (input.password.length < 8) {
+    throw new Error("Password must be at least 8 characters");
+  }
+  return input;
+}
+
+function hashPassword(input: UserInput) {
+  return {
+    ...input,
+    password: `hashed_${input.password}` // Simplified for example
+  };
+}
+
+// Validate user input with detailed error handling
+const validatedUser = pipeSync({
+  email: "invalid-email", // Invalid!
+  age: 25,
+  password: "securepass123"
+})
+  .next(validateEmail)
+  .next(validateAge)
+  .next(validatePassword)
+  .catch((error) => {
+    console.error("Validation failed:", error.message);
+    // Return validation error response
+    return {
+      error: true,
+      message: error.message,
+      field: error.message.includes("email") ? "email" :
+             error.message.includes("age") ? "age" : "password"
+    };
+  })
+  .result();
+
+console.log(validatedUser);
+// { error: true, message: "Invalid email format", field: "email" }
+```
+
+### File Processing with Fallbacks
+```typescript
+import { pipe } from "cano-ts";
+import * as fs from "fs/promises";
+
+async function readConfigFile(path: string) {
+  try {
+    const content = await fs.readFile(path, "utf-8");
+    return JSON.parse(content);
+  } catch {
+    throw new Error(`Config file not found: ${path}`);
+  }
+}
+
+async function validateConfig(config: any) {
+  const required = ["apiKey", "endpoint", "timeout"];
+  for (const field of required) {
+    if (!config[field]) {
+      throw new Error(`Missing required config field: ${field}`);
+    }
+  }
+  return config;
+}
+
+async function initializeService(config: any) {
+  return {
+    service: "MyService",
+    config,
+    status: "initialized"
+  };
+}
+
+// Try primary config, fallback to defaults on error
+const service = await pipe("./config.json")
+  .next(readConfigFile)
+  .catch(() => {
+    console.log("Primary config failed, trying fallback...");
+    return readConfigFile("./config.default.json");
+  })
+  .catch(() => {
+    console.log("All configs failed, using hardcoded defaults");
+    return {
+      apiKey: "demo_key",
+      endpoint: "https://api.example.com",
+      timeout: 5000
+    };
+  })
+  .next(validateConfig)
+  .catch((error) => {
+    console.error("Config validation failed:", error.message);
+    // Use minimal safe defaults
+    return {
+      apiKey: "safe_demo_key",
+      endpoint: "https://api.example.com",
+      timeout: 3000
+    };
+  })
+  .next(initializeService)
+  .result();
+
+console.log(service);
+```
+
+### Database Transaction Rollback
+```typescript
+import { pipe } from "cano-ts";
+
+// Simulated database operations
+const db = {
+  transactions: [] as any[],
+
+  async beginTransaction() {
+    const txId = Date.now();
+    this.transactions.push({ id: txId, operations: [] });
+    return txId;
+  },
+
+  async executeQuery(txId: number, query: string, data: any) {
+    const tx = this.transactions.find(t => t.id === txId);
+    if (!tx) throw new Error("Transaction not found");
+
+    // Simulate failure on specific operations
+    if (query.includes("invalid")) {
+      throw new Error("Database constraint violation");
+    }
+
+    tx.operations.push({ query, data });
+    return { success: true, affectedRows: 1 };
+  },
+
+  async commit(txId: number) {
+    const tx = this.transactions.find(t => t.id === txId);
+    if (!tx) throw new Error("Transaction not found");
+    console.log(`✓ Committed ${tx.operations.length} operations`);
+    return { committed: true, operations: tx.operations.length };
+  },
+
+  async rollback(txId: number) {
+    this.transactions = this.transactions.filter(t => t.id !== txId);
+    console.log("✗ Transaction rolled back");
+    return { rolledBack: true };
+  }
+};
+
+// Complex transaction with automatic rollback on error
+const result = await pipe(null)
+  .next(() => db.beginTransaction())
+  .next(async (txId) => {
+    await db.executeQuery(txId, "INSERT INTO users", { name: "Alice" });
+    await db.executeQuery(txId, "INSERT INTO profiles", { userId: 1 });
+    await db.executeQuery(txId, "INSERT invalid data", { bad: "data" }); // This will fail!
+    return txId;
+  })
+  .catch(async (error) => {
+    console.error("Transaction failed:", error.message);
+    // Rollback is handled in catch
+    // In real scenario, txId would be passed through error context
+    return { error: true, message: error.message };
+  })
+  .next(async (txIdOrError) => {
+    if (typeof txIdOrError === "object" && txIdOrError.error) {
+      return txIdOrError; // Pass error through
+    }
+    return db.commit(txIdOrError);
+  })
+  .result();
+
+console.log(result);
+```
+
+### Retry Logic with Exponential Backoff
+```typescript
+import { pipe } from "cano-ts";
+
+async function unreliableApiCall(attempt: number = 1) {
+  console.log(`Attempt ${attempt}...`);
+
+  // Simulate random failures (70% failure rate)
+  if (Math.random() < 0.7) {
+    throw new Error("Service temporarily unavailable");
+  }
+
+  return { data: "Success!", attempt };
+}
+
+async function retryWithBackoff(fn: () => Promise<any>, maxRetries: number = 3) {
+  let attempt = 0;
+  let lastError: Error;
+
+  while (attempt < maxRetries) {
+    try {
+      return await fn();
+    } catch (error) {
+      lastError = error as Error;
+      attempt++;
+
+      if (attempt < maxRetries) {
+        const delay = Math.pow(2, attempt) * 1000; // Exponential backoff
+        console.log(`Retry in ${delay}ms...`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
+  }
+
+  throw lastError!;
+}
+
+// API call with retry logic
+const apiResult = await pipe(null)
+  .next(() => unreliableApiCall())
+  .catch(() => retryWithBackoff(() => unreliableApiCall(2)))
+  .catch(() => retryWithBackoff(() => unreliableApiCall(3)))
+  .catch((error) => {
+    console.error("All retries failed:", error.message);
+    return { data: "Cached fallback data", fromCache: true };
+  })
+  .result();
+
+console.log("Final result:", apiResult);
+```
 
 ## 📊 Data Analysis Examples
 
