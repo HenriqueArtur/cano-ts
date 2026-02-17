@@ -268,6 +268,35 @@ describe("pipeSync", () => {
       expect(step3Spy).not.toHaveBeenCalled();
       expect(result).toBe(99);
     });
+
+    it("should handle user objects with 'success' property correctly", () => {
+      // User's database result object with "success" property
+      const dbResult = { success: true, affectedRows: 1, insertId: 123 };
+
+      const result = pipeSync(dbResult)
+        .next((data) => {
+          // Should receive the full user object, not be treated as internal state
+          expect(data).toEqual({ success: true, affectedRows: 1, insertId: 123 });
+          return data.insertId;
+        })
+        .next((id) => id * 2)
+        .result();
+
+      expect(result).toBe(246);
+    });
+
+    it("should handle user objects with 'error' property correctly", () => {
+      const errorResponse = { error: true, message: "Database error", code: 500 };
+
+      const result = pipeSync(errorResponse)
+        .next((data) => {
+          expect(data).toEqual({ error: true, message: "Database error", code: 500 });
+          return data.code;
+        })
+        .result();
+
+      expect(result).toBe(500);
+    });
   });
 });
 

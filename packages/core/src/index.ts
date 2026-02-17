@@ -140,17 +140,25 @@ export function pipeSync<T>(value: T) {
 
 type SyncPipeFn<T, U, Args extends unknown[]> = (arg: T, ...args: Args) => U;
 
-type PipeSyncResult<T> = { success: true; value: T } | { success: false; error: unknown };
+const PIPE_SYNC_STATE = Symbol("PipeSyncState");
+
+type PipeSyncResult<T> =
+  | { [PIPE_SYNC_STATE]: true; success: true; value: T }
+  | { [PIPE_SYNC_STATE]: true; success: false; error: unknown };
 
 class PipeSync<T> {
   private state: PipeSyncResult<T>;
   private fnHistory: string[];
 
   constructor(initialValue: T | PipeSyncResult<T>, fnHistory: string[] = []) {
-    if (typeof initialValue === "object" && initialValue !== null && "success" in initialValue) {
+    if (
+      typeof initialValue === "object" &&
+      initialValue !== null &&
+      PIPE_SYNC_STATE in initialValue
+    ) {
       this.state = initialValue as PipeSyncResult<T>;
     } else {
-      this.state = { success: true, value: initialValue as T };
+      this.state = { [PIPE_SYNC_STATE]: true, success: true, value: initialValue as T };
     }
     this.fnHistory = fnHistory;
   }
@@ -166,7 +174,7 @@ class PipeSync<T> {
       const newValue = fn(this.state.value, ...args) as U;
       return new PipeSync<U>(newValue, newHistory);
     } catch (error) {
-      return new PipeSync<U>({ success: false, error }, newHistory);
+      return new PipeSync<U>({ [PIPE_SYNC_STATE]: true, success: false, error }, newHistory);
     }
   }
 
@@ -219,7 +227,10 @@ class PipeSync<T> {
         const recoveredValue = handler(this.state.error);
         return new PipeSync<T | U>(recoveredValue, this.fnHistory);
       } catch (error) {
-        return new PipeSync<T | U>({ success: false, error }, this.fnHistory);
+        return new PipeSync<T | U>(
+          { [PIPE_SYNC_STATE]: true, success: false, error },
+          this.fnHistory,
+        );
       }
     }
     return this as PipeSync<T | U>;
