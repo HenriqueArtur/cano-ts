@@ -4,17 +4,17 @@
     "!packages/test-app"
   ],
   "catalog": {
-    "@biomejs/biome": "2.4.1",
+    "@biomejs/biome": "2.6.6",
     "@changesets/cli": "2.29.8",
-    "@rollup/plugin-typescript": "12.3.0",
+    "@rollup/plugin-typescript": "12.3.1",
     "@types/node": "25.2.3",
     "husky": "9.1.7",
-    "rollup": "4.57.1",
-    "rollup-plugin-dts": "6.3.0",
-    "tslib": "2.8.1",
+    "rollup": "4.68.0",
+    "rollup-plugin-dts": "6.5.1",
+    "tslib": "2.9.1",
     "typescript": "5.9.3",
     "vite-tsconfig-paths": "6.1.1",
     "vitest": "4.0.18",
-    "tsx": "4.21.0"
+    "tsx": "4.23.15"
   }
 }
