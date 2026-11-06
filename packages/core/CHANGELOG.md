@@ -1,5 +1,11 @@
 # @cano-ts/core
 
+## 1.4.1
+
+### Patch Changes
+
+- Update dev dependencies and build with esbuild (TypeScript 7)
+
 ## 1.4.0
 
 ### Minor Changes
