@@ -1,8 +1,10 @@
 import { execSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
-import typescript from "@rollup/plugin-typescript";
 import dts from "rollup-plugin-dts";
+// TypeScript 7 is native and has no JS API: esbuild compiles, and rollup-plugin-dts writes the types
+// with the API of @typescript/typescript6, kept beside it.
+import esbuild from "rollup-plugin-esbuild";
 
 export function FactoryRollupConfigsObject(output_dir) {
   return [
@@ -23,8 +25,10 @@ export function FactoryRollupConfigsObject(output_dir) {
         },
       ],
       plugins: [
-        typescript({
+        esbuild({
           tsconfig: "./tsconfig.json",
+          // The tsconfig's target: esbuild's own default (es2017) would rewrite the class fields.
+          target: "es2022",
         }),
         {
           name: "copy-package-json",
@@ -50,8 +54,7 @@ export function FactoryRollupConfigsObject(output_dir) {
         },
       ],
       plugins: [
-        dts(),
-        typescript({
+        dts({
           tsconfig: "./tsconfig.types.json",
         }),
       ],
