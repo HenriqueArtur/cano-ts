@@ -5,9 +5,9 @@
   ],
   "catalog": {
     "@biomejs/biome": "2.6.6",
-    "@changesets/cli": "2.29.8",
+    "@changesets/cli": "3.0.3",
     "@rollup/plugin-typescript": "12.3.1",
-    "@types/node": "25.2.3",
+    "@types/node": "26.6.6",
     "husky": "9.1.7",
     "rollup": "4.68.0",
     "rollup-plugin-dts": "6.5.1",
