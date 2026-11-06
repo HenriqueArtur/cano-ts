@@ -1,6 +1,6 @@
 {
   "name": "cano-ts",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "",
   "license": "MIT",
   "keywords": [
@@ -60,7 +60,7 @@
     "@changesets/cli": "catalog:",
     "@types/node": "catalog:",
     "husky": "catalog:",
-    "npm-check-updates": "19.3.2",
+    "npm-check-updates": "23.1.1",
     "tsx": "catalog:",
     "typescript": "catalog:",
     "vitepress": "1.6.4"
