@@ -9,9 +9,10 @@
     "test:type": "npx tsc --noEmit"
   },
   "devDependencies": {
-    "@types/node": "22.13.9",
-    "typescript": "5.8.2",
-    "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^3.0.7"
+    "@types/node": "26.6.6",
+    "typescript": "6.0.3",
+    "vite": "8.3.6",
+    "vite-tsconfig-paths": "6.1.1",
+    "vitest": "5.1.0"
   }
 }
